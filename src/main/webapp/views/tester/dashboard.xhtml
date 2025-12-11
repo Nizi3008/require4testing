@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Tester Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="../../styles.css" />
+</h:head>
+
+<h:body>
+
+<h1>Tester Dashboard</h1>
+
+<h:form>
+
+    <p:dataTable value="#{testerController.assignedTestCases}"
+                 var="tc"
+                 style="width: 70em;"
+                 emptyMessage="Keine Testfälle zugewiesen.">
+
+        <p:column headerText="Testcase ID" style="width:10rem;">
+            <h:outputText value="#{tc.id}" />
+        </p:column>
+
+        <p:column headerText="Titel" style="width:15rem;">
+            <h:outputText value="#{tc.title}" />
+        </p:column>
+
+        <p:column headerText="Beschreibung" style="width:25rem;">
+            <h:outputText value="#{tc.description}" />
+        </p:column>
+
+        <p:column headerText="Ergebnis" style="width:12rem;">
+
+            <p:selectOneMenu value="#{tc.testResult}">
+                <f:selectItem itemLabel="Bitte wählen..." itemValue=""/>
+                <f:selectItem itemLabel="Bestanden" itemValue="passed"/>
+                <f:selectItem itemLabel="Fehlgeschlagen" itemValue="failed"/>
+
+                <p:ajax listener="#{testerController.updateResult(tc, tc.testResult)}"
+                        update="@form"/>
+            </p:selectOneMenu>
+
+        </p:column>
+
+    </p:dataTable>
+
+</h:form>
+
+</h:body>
+</html>

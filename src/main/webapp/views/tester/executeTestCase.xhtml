@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Testfall Ausführen</title>
+    <link rel="stylesheet" type="text/css" href="../../styles.css" />
+</h:head>
+
+<h:body>
+
+<h1>Testfall ausführen</h1>
+
+<h:form>
+    <p:panel header="Testergebnis erfassen" style="width: 40em;">
+
+        <!-- Titel -->
+        <p:outputLabel value="Testcase Titel:" />
+        <h:outputText value="#{testerController.selectedTestCase.title}" />
+        <br/><br/>
+
+        <!-- Beschreibung -->
+        <p:outputLabel value="Beschreibung:" />
+        <h:outputText value="#{testerController.selectedTestCase.description}" />
+        <br/><br/>
+
+        <!-- Ergebnis auswählen -->
+        <p:outputLabel for="result" value="Testergebnis:" />
+        <p:selectOneMenu id="result"
+                         value="#{testerController.result}"
+                         style="width: 95%;">
+            <f:selectItem itemLabel="Bestanden" itemValue="passed"/>
+            <f:selectItem itemLabel="Fehlgeschlagen" itemValue="failed"/>
+        </p:selectOneMenu>
+        <br/><br/>
+
+        <!-- Button -->
+        <p:commandButton value="Speichern"
+                         action="#{testerController.saveResult}"
+                         ajax="false"
+                         styleClass="ui-button-primary" />
+
+        <p:button value="Abbrechen"
+                  outcome="dashboard.xhtml?faces-redirect=true"
+                  style="margin-left:1em;" />
+
+        <p:messages autoUpdate="true" />
+
+    </p:panel>
+</h:form>
+
+</h:body>
+</html>

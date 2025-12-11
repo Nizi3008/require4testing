@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Neuen Testfall erstellen</title>
+    <link rel="stylesheet" type="text/css" href="../../styles.css" />
+</h:head>
+
+<h:body>
+
+<h1>Testfall erstellen</h1>
+
+<h:form>
+    <p:panel header="Testfall" style="width: 40em;">
+
+        <!-- REQUIREMENT AUSWÄHLEN -->
+        <p:outputLabel for="req" value="Requirement:" />
+        <p:selectOneMenu id="req"
+                         value="#{testCaseAuthorController.selectedRequirementId}"
+                         style="width: 95%;">
+            <f:selectItem itemLabel="Bitte wählen..." itemValue="" />
+            <f:selectItems value="#{testCaseAuthorController.allRequirements}"
+                           var="r"
+                           itemLabel="#{r.id} - #{r.title}"
+                           itemValue="#{r.id}" />
+        </p:selectOneMenu>
+        <br/><br/>
+
+        <!-- TITEL -->
+        <p:outputLabel for="title" value="Titel:" />
+        <p:inputText id="title"
+                     value="#{testCaseAuthorController.newTestCase.title}"
+                     style="width: 95%;" />
+        <br/><br/>
+
+        <!-- BESCHREIBUNG -->
+        <p:outputLabel for="desc" value="Beschreibung:" />
+        <p:inputTextarea id="desc"
+                         value="#{testCaseAuthorController.newTestCase.description}"
+                         rows="4"
+                         style="width: 95%;" />
+        <br/><br/>
+
+        <!-- BUTTONS -->
+        <p:commandButton value="Speichern"
+                         action="#{testCaseAuthorController.saveTestCase}"
+                         ajax="false"
+                         styleClass="ui-button-primary" />
+
+        <p:button value="Abbrechen"
+                  outcome="dashboard.xhtml?faces-redirect=true"
+                  style="margin-left:1em;" />
+
+    </p:panel>
+</h:form>
+
+</h:body>
+</html>

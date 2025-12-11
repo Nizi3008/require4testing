@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Anforderung erstellen</title>
+    <link rel="stylesheet" type="text/css" href="../../styles.css" />
+</h:head>
+
+<h:body>
+
+<h1>Neue Anforderung erstellen</h1>
+
+<h:form>
+    <p:panel header="Neue Anforderung" style="width: 40em;">
+
+        <h:panelGrid columns="2" columnClasses="label,value">
+
+            <h:outputLabel for="id" value="ID (z.B. REQ-001)" />
+            <h:inputText id="id"
+                         value="#{requirementsEngineerController.newRequirement.id}"
+                         required="true" />
+
+            <h:outputLabel for="title" value="Titel" />
+            <h:inputText id="title"
+                         value="#{requirementsEngineerController.newRequirement.title}"
+                         required="true" />
+
+            <h:outputLabel for="desc" value="Beschreibung" />
+            <h:inputTextarea id="desc"
+                             value="#{requirementsEngineerController.newRequirement.description}"
+                             required="true"
+                             rows="5" cols="40" />
+        </h:panelGrid>
+
+        <p:commandButton value="Speichern"
+                         action="#{requirementsEngineerController.saveRequirement}"
+                         ajax="false"
+                         styleClass="ui-button-primary" />
+
+        <p:button value="Abbrechen"
+                  outcome="/views/requirements/dashboard.xhtml?faces-redirect=true"
+                  style="margin-left: 1em;" />
+
+        <p:messages autoUpdate="true" />
+
+    </p:panel>
+</h:form>
+
+</h:body>
+</html>

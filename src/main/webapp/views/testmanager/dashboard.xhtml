@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+    <title>Testmanager Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="../../styles.css" />
+</h:head>
+
+<h:body>
+
+<h1>Testmanager Dashboard</h1>
+
+<!-- =================================================== -->
+<!--  BLOCK 1 – ÜBERSICHT ALLER TESTLÄUFE               -->
+<!-- =================================================== -->
+
+<h2>Testläufe</h2>
+
+<h:form>
+    <p:dataTable value="#{testManagerController.testRuns}"
+                 var="tr"
+                 style="width: 95%; font-size: 1rem;"
+                 emptyMessage="Es wurden noch keine Testläufe angelegt."
+                 responsiveLayout="scroll">
+
+        <!-- Testlauf-ID -->
+        <p:column headerText="ID" style="width: 8rem;">
+            <h:outputText value="#{tr.id}" />
+        </p:column>
+
+        <!-- Tester -->
+        <p:column headerText="Tester" style="width: 12rem;">
+            <h:outputText value="#{tr.testerName}" />
+        </p:column>
+
+        <!-- Testfälle + Requirements -->
+        <p:column headerText="Testfälle" style="width: 60rem;">
+
+            <ui:repeat value="#{tr.testCases}" var="tc">
+
+                <div style="margin-bottom: 1.2rem;
+                            padding: 0.7rem;
+                            border-bottom: 1px solid #ddd;
+                            line-height: 1.4;">
+
+                    <!-- Testfall -->
+                    <strong>#{tc.id}</strong> – #{tc.title} <br/>
+
+                    <!-- Requirement -->
+                    <span style="color: #666;">
+                        Anforderung:
+                        <strong>
+                            #{requirementsEngineerController.findRequirement(tc.requirementId).id}
+                        </strong>
+                        –
+                        #{requirementsEngineerController.findRequirement(tc.requirementId).title}
+                    </span>
+
+                </div>
+
+            </ui:repeat>
+
+        </p:column>
+
+    </p:dataTable>
+</h:form>
+
+<br/>
+
+<!-- =================================================== -->
+<!--  BLOCK 2 – BUTTON TESTLAUF ANLEGEN                 -->
+<!-- =================================================== -->
+
+<h:form>
+    <p:commandButton value="Testlauf anlegen"
+                     action="/views/testmanager/createTestRun.xhtml?faces-redirect=true"
+                     ajax="false"
+                     styleClass="ui-button-primary" />
+</h:form>
+
+</h:body>
+</html>
