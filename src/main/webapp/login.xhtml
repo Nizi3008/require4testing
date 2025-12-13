@@ -1,46 +1,45 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="jakarta.faces.html"
-      xmlns:f="jakarta.faces.core"
-      xmlns:p="http://primefaces.org/ui">
-
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
 <h:head>
-    <title>Require4Testing Login</title>
-    <link rel="stylesheet" type="text/css" media="screen" href="styles.css" />
+	<title>Require4Testing Login</title>
+	<link rel="stylesheet" type="text/css" media="screen" href="styles.css" />
 </h:head>
-
 <h:body>
-    <h1>Require4Testing Login</h1>
+	<h1>Require4Testing Login</h1>
+	<h:form>
+		<p:card style="width: 30em">
+			<f:facet name="title">Login</f:facet>
 
-    <h:form>
-        <p:card style="width: 30em">
+			<p:panelGrid>
+				<p:row>
+					<p:outputLabel value="Benutzername: " for="name" />
+					<p:inputText id="name" value="#{loginController.user.name}"
+						size="25">
+						<f:event type="jakarta.faces.event.PostValidateEvent"
+							listener="#{loginController.postValidateName}" />
+					</p:inputText>
+				</p:row>
+				<br/>
+				<p:row>
+					<p:outputLabel value="Passwort: " for="pass" />
+					<p:password id="pass" value="#{loginController.user.passwort}"
+						required="true" validator="#{loginController.validateLogin}"
+						size="25" />
+				</p:row>
+			</p:panelGrid>
 
-            <f:facet name="title">
-                Login
-            </f:facet>
+			<f:facet name="footer">
+				<p:commandButton value="Login" action="#{loginController.login}" />
+				<p:messages>
+					<p:autoUpdate />
+				</p:messages>
+			</f:facet>
 
-            <p:panelGrid columns="2" columnClasses="label,value">
-
-                <p:outputLabel for="name" value="Benutzername:" />
-                <p:inputText id="name" value="#{loginController.username}"
-                             size="25"/>
-
-                <p:outputLabel for="pass" value="Passwort:" />
-				<p:password id="pass" value="#{loginController.password}"
-                            required="true"
-                            size="25"/>
-            </p:panelGrid>
-
-            <f:facet name="footer">
-                <p:commandButton value="Login"
-                                 action="#{loginController.login}"
-                                 styleClass="ui-button-primary" />
-
-                <p:messages autoUpdate="true"/>
-            </f:facet>
-
-        </p:card>
-    </h:form>
+		</p:card>
+	</h:form>
 
 </h:body>
 </html>

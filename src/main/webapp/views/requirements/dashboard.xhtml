@@ -19,20 +19,17 @@
                  style="width: 60em;"
                  emptyMessage="Noch keine Anforderungen vorhanden.">
 
-<p:dataTable value="#{requirementsEngineerController.allRequirements}"
-             var="req"
-             style="width: 60em;"
-             emptyMessage="Noch keine Anforderungen vorhanden.">>
-    <p:column headerText="ID">
-        <h:outputText value="#{req.id}" />
-    </p:column>
-    <p:column headerText="Titel">
-        <h:outputText value="#{req.title}" />
-    </p:column>
-    <p:column headerText="Beschreibung">
-        <h:outputText value="#{req.description}" />
-    </p:column>
-</p:dataTable>
+        <p:column headerText="ID">
+            <h:outputText value="#{r.id}" />
+        </p:column>
+
+        <p:column headerText="Titel">
+            <h:outputText value="#{r.title}" />
+        </p:column>
+
+        <p:column headerText="Beschreibung">
+            <h:outputText value="#{r.description}" />
+        </p:column>
 
     </p:dataTable>
 </h:form>

@@ -1,12 +1,12 @@
 package require4testing.controller.roles;
 
-import jakarta.enterprise.context.SessionScoped;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+
+import jakarta.enterprise.context.SessionScoped;
+import jakarta.inject.Named;
 import require4testing.model.Requirement;
-import require4testing.service.RequirementService;
 
 @Named("requirementsEngineerController")
 @SessionScoped
@@ -14,30 +14,43 @@ public class RequirementsEngineerController implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Inject
-    private RequirementService requirementService;
-
+    private List<Requirement> requirements = new ArrayList<>();  
     private Requirement newRequirement = new Requirement();
 
-    // Wird vom createRequirement.xhtml aufgerufen
     public String saveRequirement() {
-        requirementService.save(newRequirement);
-        // Formular-Bean zurücksetzen
+
+        int nextNumber = requirements.size() + 1;
+        String generatedId = String.format("REQ-%03d", nextNumber); // REQ-001
+
+        newRequirement.setId(generatedId);
+        requirements.add(newRequirement);
+
         newRequirement = new Requirement();
-        // Zur Dashboard-Seite der Requirements navigieren
+
         return "/views/requirements/dashboard.xhtml?faces-redirect=true";
     }
+    
+    public Requirement findRequirement(String id) {
+        if (id == null) return null;
 
-    // Für Tabelle im Dashboard
-    public List<Requirement> getAllRequirements() {
-        return requirementService.findAll();
+        for (Requirement r : requirements) {
+            if (r.getId().equals(id)) {
+                return r;
+            }
+        }
+        return null;
     }
 
-    // Getter/Setter
+    // Getter
+    public List<Requirement> getRequirements() {
+        return requirements;
+    }
+
     public Requirement getNewRequirement() {
         return newRequirement;
     }
 
+    // Setter
     public void setNewRequirement(Requirement newRequirement) {
         this.newRequirement = newRequirement;
     }

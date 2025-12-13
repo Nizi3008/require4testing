@@ -15,25 +15,24 @@
 <h:form>
     <p:panel header="Neue Anforderung" style="width: 40em;">
 
-        <h:panelGrid columns="2" columnClasses="label,value">
+        <!-- TITEL -->
+        <p:outputLabel for="title" value="Titel:" />
+        <p:inputText id="title"
+                     value="#{requirementsEngineerController.newRequirement.title}"
+                     required="true"
+                     requiredMessage="Titel darf nicht leer sein."
+                     style="width: 95%;" />
+        <br/><br/>
 
-            <h:outputLabel for="id" value="ID (z.B. REQ-001)" />
-            <h:inputText id="id"
-                         value="#{requirementsEngineerController.newRequirement.id}"
-                         required="true" />
+        <!-- BESCHREIBUNG -->
+        <p:outputLabel for="desc" value="Beschreibung:" />
+        <p:inputTextarea id="desc"
+                         value="#{requirementsEngineerController.newRequirement.description}"
+                         rows="5"
+                         style="width: 95%;" />
+        <br/><br/>
 
-            <h:outputLabel for="title" value="Titel" />
-            <h:inputText id="title"
-                         value="#{requirementsEngineerController.newRequirement.title}"
-                         required="true" />
-
-            <h:outputLabel for="desc" value="Beschreibung" />
-            <h:inputTextarea id="desc"
-                             value="#{requirementsEngineerController.newRequirement.description}"
-                             required="true"
-                             rows="5" cols="40" />
-        </h:panelGrid>
-
+        <!-- BUTTONS -->
         <p:commandButton value="Speichern"
                          action="#{requirementsEngineerController.saveRequirement}"
                          ajax="false"

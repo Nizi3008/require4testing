@@ -1,25 +1,23 @@
 package require4testing.model;
 
-import jakarta.persistence.*;
 import java.io.Serializable;
 
-@Entity
-@Table(name = "requirements")
+
 public class Requirement implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @Column(length = 50)
-    private String id;          // z.B. "REQ-001" (vom User vergeben)
-
-    @Column(nullable = false, length = 200)
+    private String id;          // REQ-001
     private String title;
-
-    @Column(nullable = false, length = 2000)
     private String description;
 
     public Requirement() {
+    }
+
+    public Requirement(String id, String title, String description) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
     }
 
     // --- Getter & Setter ---
