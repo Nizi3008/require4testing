@@ -39,8 +39,9 @@
 
         <!-- REQUIREMENT-TITEL -->
         <p:column headerText="Requirement Titel">
-            <h:outputText 
-                value="#{requirementsEngineerController.findRequirement(tc.requirementId).title}" />
+            <h:outputText>
+	value="#{requirementsEngineerController.findRequirement(tc.requirementId).title}"
+	</h:outputText>
         </p:column>
 
     </p:dataTable>

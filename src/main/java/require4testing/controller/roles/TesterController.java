@@ -24,17 +24,13 @@ public class TesterController implements Serializable {
     @Inject
     private TestManagerController testManagerController;
 
-    // ========================
     // Tester setzt Namen
-    // ========================
     public void setTesterName(String name) {
         this.testerName = name;
         reloadAssignedTestCases();
     }
 
-    // ========================
     // Echte Testfälle laden
-    // ========================
     private void reloadAssignedTestCases() {
 
         assignedTestCases.clear();
@@ -48,9 +44,7 @@ public class TesterController implements Serializable {
         }
     }
 
-    // ========================
     // Ergebnis direkt im Dashboard speichern
-    // ========================
     public void updateResult(TestCase tc, String result) {
         tc.setTestResult(result);
     }

@@ -3,10 +3,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ipwa02-01</groupId>
-	<artifactId>lektion6</artifactId>
+	<artifactId>require4testing</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>lektion6 Maven Webapp</name>
+	<name>require4testing Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
@@ -27,7 +27,7 @@
 		<dependency>
 			<groupId>jakarta.servlet</groupId>
 			<artifactId>jakarta.servlet-api</artifactId>
-			<version>5.0.0</version>
+			<version>6.0.0</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -42,11 +42,12 @@
 			<version>2.0.0</version>
 		</dependency>
 
-		<dependency>
-			<groupId>jakarta.enterprise</groupId>
-			<artifactId>jakarta.enterprise.cdi-api</artifactId>
-			<version>3.0.0</version>
-		</dependency>
+<dependency>
+    <groupId>jakarta.enterprise</groupId>
+    <artifactId>jakarta.enterprise.cdi-api</artifactId>
+    <version>3.0.0</version>
+</dependency>
+
 		<dependency>
 			<groupId>org.jboss.weld.servlet</groupId>
 			<artifactId>weld-servlet-core</artifactId>
@@ -71,10 +72,16 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.28</version>
 		</dependency>
+		
+		<dependency>
+    <groupId>jakarta.persistence</groupId>
+    <artifactId>jakarta.persistence-api</artifactId>
+    <version>3.1.0</version>
+</dependency>
 
 	</dependencies>
 
 	<build>
-		<finalName>lektion6</finalName>
+		<finalName>require4testing</finalName>
 	</build>
 </project>

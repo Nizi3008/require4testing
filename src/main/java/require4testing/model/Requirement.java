@@ -2,13 +2,30 @@ package require4testing.model;
 
 import java.io.Serializable;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "requirements")
 public class Requirement implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String id;          // REQ-001
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long dbId; // technische Primär-ID
+
+    @Column(name = "requirement_id", unique = true, nullable = false)
+    private String id; // fachliche ID: REQ-001
+
+    @Column(nullable = false)
     private String title;
+
+    @Column(length = 2000)
     private String description;
 
     public Requirement() {
@@ -21,6 +38,10 @@ public class Requirement implements Serializable {
     }
 
     // --- Getter & Setter ---
+
+    public Long getDbId() {
+        return dbId;
+    }
 
     public String getId() {
         return id;
