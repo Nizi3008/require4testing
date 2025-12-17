@@ -1,12 +1,14 @@
 package require4testing.controller.roles;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
+
 import require4testing.model.Requirement;
+import require4testing.service.RequirementService;
 
 @Named("requirementsEngineerController")
 @SessionScoped
@@ -14,43 +16,39 @@ public class RequirementsEngineerController implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private List<Requirement> requirements = new ArrayList<>();  
+    @Inject
+    private RequirementService requirementService;
+
     private Requirement newRequirement = new Requirement();
 
+    // --- CREATE ---
     public String saveRequirement() {
 
-        int nextNumber = requirements.size() + 1;
-        String generatedId = String.format("REQ-%03d", nextNumber); // REQ-001
-
+        // ID generieren (DB-unabhängig)
+        String generatedId = requirementService.generateNextRequirementId();
         newRequirement.setId(generatedId);
-        requirements.add(newRequirement);
+
+        requirementService.save(newRequirement);
 
         newRequirement = new Requirement();
 
         return "/views/requirements/dashboard.xhtml?faces-redirect=true";
     }
-    
+
+    // --- READ ---
     public Requirement findRequirement(String id) {
-        if (id == null) return null;
-
-        for (Requirement r : requirements) {
-            if (r.getId().equals(id)) {
-                return r;
-            }
-        }
-        return null;
+        return requirementService.findByBusinessId(id);
     }
 
-    // Getter
     public List<Requirement> getRequirements() {
-        return requirements;
+        return requirementService.findAll();
     }
 
+    // --- Getter / Setter ---
     public Requirement getNewRequirement() {
         return newRequirement;
     }
 
-    // Setter
     public void setNewRequirement(Requirement newRequirement) {
         this.newRequirement = newRequirement;
     }
