@@ -1,6 +1,7 @@
 package require4testing.model;
 
 import java.io.Serializable;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -9,51 +10,29 @@ public class TestRun implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    // =======================
-    // TECHNISCHE DB-ID
-    // =======================
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long dbId;
+    private Long dbId; // technischer PK
 
-    // =======================
-    // FACHLICHE TESTRUN-ID (TR-001)
-    // =======================
     @Column(nullable = false, unique = true)
-    private String id;
+    private String id; // fachliche ID: TR-001
 
-    // =======================
-    // ZUGEORDNETER TESTFALL
-    // =======================
     @ManyToOne(optional = false)
     @JoinColumn(name = "testcase_id")
     private TestCase testCase;
 
-    // =======================
-    // TESTER
-    // =======================
     @Column(nullable = false)
     private String testerName;
 
-    // =======================
-    // TESTERGEBNIS
-    // =======================
     @Column(nullable = false)
     private String testResult;   // OFFEN / PASSED / FAILED
 
     @Column(length = 2000)
     private String testComment;
 
-    // =======================
-    // KONSTRUKTOR
-    // =======================
-    public TestRun() {
-        this.testResult = "OFFEN"; // Default
-    }
+    public TestRun() {}
 
-    // =======================
-    // GETTER / SETTER
-    // =======================
+    // ===== Getter / Setter =====
 
     public Long getDbId() {
         return dbId;

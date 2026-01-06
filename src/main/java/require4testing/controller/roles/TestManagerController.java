@@ -8,11 +8,11 @@ import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import require4testing.model.Requirement;
 import require4testing.model.TestCase;
 import require4testing.model.TestRun;
 import require4testing.model.User;
 import require4testing.service.TestCaseService;
+import require4testing.service.TestRunService;
 
 @Named("testManagerController")
 @SessionScoped
@@ -20,21 +20,15 @@ public class TestManagerController implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    // =======================
-    // PROTOTYPISCHE LISTEN
-    // =======================
-    private List<TestRun> testRuns = new ArrayList<>();
     private List<User> testers = new ArrayList<>();
 
-    // =======================
-    // SERVICES
-    // =======================
     @Inject
     private TestCaseService testCaseService;
 
-    // =======================
-    // AUSWAHLFELDER (JSF)
-    // =======================
+    @Inject
+    private TestRunService testRunService;
+
+    // Auswahlfelder (JSF)
     private String selectedRequirementId;
     private Long selectedTestCaseDbId;
     private String selectedTester;
@@ -45,12 +39,8 @@ public class TestManagerController implements Serializable {
         testers.add(new User("Tester3", "333", "tester"));
     }
 
-
-    // =======================
-    // TESTCASES AUS DB NACH REQUIREMENT
-    // =======================
+    // TestCases je Requirement (aus DB)
     public List<TestCase> getTestCasesForSelectedRequirement() {
-
         List<TestCase> list = new ArrayList<>();
 
         if (selectedRequirementId == null || selectedRequirementId.isEmpty()) {
@@ -66,32 +56,25 @@ public class TestManagerController implements Serializable {
         return list;
     }
 
-    // =======================
-    // PROTOTYP: TESTRUN ANLEGEN
-    // =======================
+    // TestRun speichern (persistieren!)
     public String saveTestRun() {
 
-        if (selectedTestCaseDbId == null) {
+        if (selectedTestCaseDbId == null || selectedTester == null || selectedTester.isBlank()) {
             return null;
         }
 
-        TestCase selectedTestCase =
-                testCaseService.findByDbId(selectedTestCaseDbId);
-
+        TestCase selectedTestCase = testCaseService.findByDbId(selectedTestCaseDbId);
         if (selectedTestCase == null) {
             return null;
         }
 
         TestRun tr = new TestRun();
-
-        //NEU: fachliche TestRun-ID
-        tr.setId(generateNextTestRunId());
-
+        tr.setId(generateNextTestRunIdFromDb());  // fachliche ID aus DB ableiten
         tr.setTestCase(selectedTestCase);
         tr.setTesterName(selectedTester);
         tr.setTestResult("OFFEN");
 
-        testRuns.add(tr);
+        testRunService.save(tr); // DB!
 
         // Reset
         selectedRequirementId = null;
@@ -100,44 +83,36 @@ public class TestManagerController implements Serializable {
 
         return "/views/testmanager/dashboard.xhtml?faces-redirect=true";
     }
-    
-    private String generateNextTestRunId() {
-        int next = testRuns.size() + 1;
+
+    private String generateNextTestRunIdFromDb() {
+        String max = testRunService.findMaxBusinessId(); // z.B. "TR-014"
+        int next = 1;
+
+        if (max != null && max.startsWith("TR-")) {
+            try {
+                next = Integer.parseInt(max.substring(3)) + 1;
+            } catch (NumberFormatException ignored) {
+                next = 1;
+            }
+        }
+
         return String.format("TR-%03d", next);
     }
 
-    // =======================
-    // GETTER & SETTER (JSF)
-    // =======================
-    public String getSelectedRequirementId() {
-        return selectedRequirementId;
-    }
-
-    public void setSelectedRequirementId(String selectedRequirementId) {
-        this.selectedRequirementId = selectedRequirementId;
-    }
-
-    public Long getSelectedTestCaseDbId() {
-        return selectedTestCaseDbId;
-    }
-
-    public void setSelectedTestCaseDbId(Long selectedTestCaseDbId) {
-        this.selectedTestCaseDbId = selectedTestCaseDbId;
-    }
-
-    public String getSelectedTester() {
-        return selectedTester;
-    }
-
-    public void setSelectedTester(String selectedTester) {
-        this.selectedTester = selectedTester;
-    }
-
+    // Dashboard-Liste aus DB
     public List<TestRun> getTestRuns() {
-        return testRuns;
+        return testRunService.findAll();
     }
 
-    public List<User> getTesters() {
-        return testers;
-    }
+    // Getter/Setter
+    public String getSelectedRequirementId() { return selectedRequirementId; }
+    public void setSelectedRequirementId(String selectedRequirementId) { this.selectedRequirementId = selectedRequirementId; }
+
+    public Long getSelectedTestCaseDbId() { return selectedTestCaseDbId; }
+    public void setSelectedTestCaseDbId(Long selectedTestCaseDbId) { this.selectedTestCaseDbId = selectedTestCaseDbId; }
+
+    public String getSelectedTester() { return selectedTester; }
+    public void setSelectedTester(String selectedTester) { this.selectedTester = selectedTester; }
+
+    public List<User> getTesters() { return testers; }
 }
