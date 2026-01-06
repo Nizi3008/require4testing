@@ -5,7 +5,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 <h:head>
-    <title>Testfall Ausführen</title>
+    <title>Testfall ausführen</title>
     <link rel="stylesheet" type="text/css" href="../../styles.css" />
 </h:head>
 
@@ -16,38 +16,43 @@
 <h:form>
     <p:panel header="Testergebnis erfassen" style="width: 40em;">
 
-        <!-- Titel -->
-        <p:outputLabel value="Testcase Titel:" />
-        <h:outputText value="#{testerController.selectedTestCase.title}" />
-        <br/><br/>
-
-        <!-- Beschreibung -->
-        <p:outputLabel value="Beschreibung:" />
-        <h:outputText value="#{testerController.selectedTestCase.description}" />
-        <br/><br/>
-
-        <!-- Ergebnis auswählen -->
-        <p:outputLabel for="result" value="Testergebnis:" />
-        <p:selectOneMenu id="result"
-                         value="#{testerController.result}"
-                         style="width: 95%;">
-            <f:selectItem itemLabel="Bestanden" itemValue="passed"/>
-            <f:selectItem itemLabel="Fehlgeschlagen" itemValue="failed"/>
+        <!-- TESTCASE -->
+        <p:outputLabel for="tc" value="Testfall:" />
+        <p:selectOneMenu id="tc"
+                         value="#{testerController.selectedTestCaseDbId}">
+            <f:selectItem itemLabel="Testfall wählen" itemValue="" />
+            <f:selectItems value="#{testerController.testCases}"
+                           var="tc"
+                           itemLabel="#{tc.id} - #{tc.title}"
+                           itemValue="#{tc.dbId}" />
         </p:selectOneMenu>
+
         <br/><br/>
 
-        <!-- Button -->
+        <!-- ERGEBNIS -->
+        <p:outputLabel for="result" value="Ergebnis:" />
+        <p:selectOneMenu id="result"
+                         value="#{testerController.newTestRun.testResult}">
+            <f:selectItem itemLabel="PASSED" itemValue="PASSED" />
+            <f:selectItem itemLabel="FAILED" itemValue="FAILED" />
+        </p:selectOneMenu>
+
+        <br/><br/>
+
+        <!-- KOMMENTAR -->
+        <p:outputLabel for="comment" value="Kommentar:" />
+        <p:inputTextarea id="comment"
+                         value="#{testerController.newTestRun.testComment}"
+                         rows="4"
+                         style="width:95%;" />
+
+        <br/><br/>
+
+        <!-- BUTTON -->
         <p:commandButton value="Speichern"
-                         action="#{testerController.saveResult}"
+                         action="#{testerController.saveTestRun}"
                          ajax="false"
                          styleClass="ui-button-primary" />
-
-        <p:button value="Abbrechen"
-                  outcome="dashboard.xhtml?faces-redirect=true"
-                  style="margin-left:1em;" />
-
-        <p:messages autoUpdate="true" />
-
     </p:panel>
 </h:form>
 

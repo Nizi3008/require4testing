@@ -34,15 +34,13 @@
 
         <!-- REQUIREMENT-ID -->
         <p:column headerText="Requirement ID">
-            <h:outputText value="#{tc.requirementId}" />
+            <h:outputText value="#{tc.requirement.id}" />
         </p:column>
 
         <!-- REQUIREMENT-TITEL -->
-        <p:column headerText="Requirement Titel">
-            <h:outputText>
-	value="#{requirementsEngineerController.findRequirement(tc.requirementId).title}"
-	</h:outputText>
-        </p:column>
+<p:column headerText="Requirement Titel">
+    <h:outputText value="#{tc.requirement.title}" />
+</p:column>
 
     </p:dataTable>
 </h:form>

@@ -20,52 +20,32 @@
 <h2>Testläufe</h2>
 
 <h:form>
-    <p:dataTable value="#{testManagerController.testRuns}"
-                 var="tr"
-                 style="width: 95%; font-size: 1rem;"
-                 emptyMessage="Es wurden noch keine Testläufe angelegt."
-                 responsiveLayout="scroll">
+<p:dataTable value="#{testManagerController.testRuns}"
+             var="tr"
+             emptyMessage="Es wurden noch keine Testläufe angelegt.">
 
-        <!-- Testlauf-ID -->
-        <p:column headerText="ID" style="width: 8rem;">
-            <h:outputText value="#{tr.id}" />
-        </p:column>
+    <p:column headerText="TestRun ID">
+        <h:outputText value="#{tr.id}" />
+    </p:column>
 
-        <!-- Tester -->
-        <p:column headerText="Tester" style="width: 12rem;">
-            <h:outputText value="#{tr.testerName}" />
-        </p:column>
+    <p:column headerText="Tester">
+        <h:outputText value="#{tr.testerName}" />
+    </p:column>
 
-        <!-- Testfälle + Requirements -->
-        <p:column headerText="Testfälle" style="width: 60rem;">
+    <p:column headerText="TestCase">
+        <strong>#{tr.testCase.id}</strong> – #{tr.testCase.title}
+        <br/>
+        <span style="color:#666">
+            Requirement:
+            #{tr.testCase.requirement.id} – #{tr.testCase.requirement.title}
+        </span>
+    </p:column>
 
-            <ui:repeat value="#{tr.testCases}" var="tc">
+    <p:column headerText="Ergebnis">
+        <h:outputText value="#{tr.testResult}" />
+    </p:column>
 
-                <div style="margin-bottom: 1.2rem;
-                            padding: 0.7rem;
-                            border-bottom: 1px solid #ddd;
-                            line-height: 1.4;">
-
-                    <!-- Testfall -->
-                    <strong>#{tc.id}</strong> – #{tc.title} <br/>
-
-                    <!-- Requirement -->
-                    <span style="color: #666;">
-                        Anforderung:
-                        <strong>
-                            #{requirementsEngineerController.findRequirement(tc.requirementId).id}
-                        </strong>
-                        –
-                        #{requirementsEngineerController.findRequirement(tc.requirementId).title}
-                    </span>
-
-                </div>
-
-            </ui:repeat>
-
-        </p:column>
-
-    </p:dataTable>
+</p:dataTable>
 </h:form>
 
 <br/>

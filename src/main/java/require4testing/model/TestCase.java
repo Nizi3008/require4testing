@@ -1,48 +1,78 @@
 package require4testing.model;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "testcases")
 public class TestCase implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String id;               
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long dbId; // technischer PK
+
+    @Column(nullable = false, unique = true)
+    private String id; // TC-001
+
+    @Column(nullable = false)
     private String title;
+
+    @Column(length = 2000)
     private String description;
-    private String requirementId;
 
-    public TestCase() {}
+    // Beziehung zum Requirement
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "requirement_id")
+    private Requirement requirement;
 
-    // Neuer Hauptkonstruktor
-    public TestCase(String id, String title, String description, String requirementId) {
+    public TestCase() {
+    }
+
+    public TestCase(String id, String title, String description, Requirement requirement) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.requirementId = requirementId;
+        this.requirement = requirement;
     }
 
-    // ALTER Konstruktor für Dummy-Test-Cases der Tester
-    public TestCase(String id, String title, String description) {
-        this(id, title, description, null);
+    // --- Getter / Setter ---
+
+    public Long getDbId() {
+        return dbId;
     }
 
-    // Getter & Setter
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public String getId() {
+        return id;
+    }
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public String getTitle() {
+        return title;
+    }
 
-    public String getRequirementId() { return requirementId; }
-    public void setRequirementId(String requirementId) { this.requirementId = requirementId; }
-    
-    private String testResult;   // "passed" / "failed"
-    private String testComment;  // Kommentar des Testers
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-    public String getTestResult() { return testResult; }
-    public void setTestResult(String testResult) { this.testResult = testResult; }
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Requirement getRequirement() {
+        return requirement;
+    }
+
+    public void setRequirement(Requirement requirement) {
+        this.requirement = requirement;
+    }
 }

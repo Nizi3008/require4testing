@@ -17,16 +17,22 @@
     <p:panel header="Testfall" style="width: 40em;">
 
         <!-- REQUIREMENT AUSWÄHLEN -->
-        <p:outputLabel for="req" value="Requirement:" />
-        <p:selectOneMenu id="req"
+        <p:outputLabel for="requirement" value="Requirement:" />
+
+        <p:selectOneMenu id="requirement"
                          value="#{testCaseAuthorController.selectedRequirementId}"
+                         required="true"
                          style="width: 95%;">
-            <f:selectItem itemLabel="Bitte wählen..." itemValue="" />
-            <f:selectItems value="#{testCaseAuthorController.allRequirements}"
-                           var="r"
-                           itemLabel="#{r.id} - #{r.title}"
-                           itemValue="#{r.id}" />
+
+            <f:selectItem itemLabel="Requirement wählen" itemValue="" />
+
+            <f:selectItems
+                value="#{testCaseAuthorController.allRequirements}"
+                var="req"
+                itemLabel="#{req.id} - #{req.title}"
+                itemValue="#{req.id}" />
         </p:selectOneMenu>
+
         <br/><br/>
 
         <!-- TITEL -->

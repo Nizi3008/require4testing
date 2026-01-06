@@ -88,7 +88,6 @@ public class LoginController implements Serializable {
                 return "/views/testcases/dashboard.xhtml?faces-redirect=true";
 
             case "tester":
-                testerController.setTesterName(user.getName());
                 return "/views/tester/dashboard.xhtml?faces-redirect=true";
 
             case "testmanager":

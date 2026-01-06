@@ -1,30 +1,63 @@
 package require4testing.model;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "testruns")
 public class TestRun implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String id;                        // ID des Testlaufs
-    private String testerName;                // zugewiesener Tester
-    private List<TestCase> testCases;         // mehrere Testfaelle
-    private String title;
-    private String description;
+    // =======================
+    // TECHNISCHE DB-ID
+    // =======================
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long dbId;
 
-    // ----------------------------
-    //   KONSTRUKTOR
-    // ----------------------------
+    // =======================
+    // FACHLICHE TESTRUN-ID (TR-001)
+    // =======================
+    @Column(nullable = false, unique = true)
+    private String id;
+
+    // =======================
+    // ZUGEORDNETER TESTFALL
+    // =======================
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "testcase_id")
+    private TestCase testCase;
+
+    // =======================
+    // TESTER
+    // =======================
+    @Column(nullable = false)
+    private String testerName;
+
+    // =======================
+    // TESTERGEBNIS
+    // =======================
+    @Column(nullable = false)
+    private String testResult;   // OFFEN / PASSED / FAILED
+
+    @Column(length = 2000)
+    private String testComment;
+
+    // =======================
+    // KONSTRUKTOR
+    // =======================
     public TestRun() {
-        this.testCases = new ArrayList<>();
+        this.testResult = "OFFEN"; // Default
     }
 
-    // ----------------------------
-    //   GETTER & SETTER
-    // ----------------------------
+    // =======================
+    // GETTER / SETTER
+    // =======================
+
+    public Long getDbId() {
+        return dbId;
+    }
 
     public String getId() {
         return id;
@@ -32,6 +65,14 @@ public class TestRun implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public TestCase getTestCase() {
+        return testCase;
+    }
+
+    public void setTestCase(TestCase testCase) {
+        this.testCase = testCase;
     }
 
     public String getTesterName() {
@@ -42,23 +83,19 @@ public class TestRun implements Serializable {
         this.testerName = testerName;
     }
 
-
-    public List<TestCase> getTestCases() {
-        return testCases;
-    }
-    
-
-    public void setTestCases(List<TestCase> testCases) {
-        this.testCases = testCases;
+    public String getTestResult() {
+        return testResult;
     }
 
-    // Testfall hinzufügen
-    public void addTestCase(TestCase tc) {
-        this.testCases.add(tc);
+    public void setTestResult(String testResult) {
+        this.testResult = testResult;
     }
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public String getTestComment() {
+        return testComment;
+    }
+
+    public void setTestComment(String testComment) {
+        this.testComment = testComment;
+    }
 }

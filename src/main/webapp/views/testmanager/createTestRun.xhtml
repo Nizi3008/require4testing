@@ -34,15 +34,18 @@
 
         <!-- TESTFALL AUSWÄHLEN -->
         <p:outputLabel for="tc" value="Testfall:" />
-        <p:selectOneMenu id="tc"
-                         value="#{testManagerController.selectedTestCaseId}"
-                         style="width: 95%;">
-            <f:selectItem itemLabel="Bitte wählen..." itemValue="" />
-            <f:selectItems value="#{testManagerController.testCasesForSelectedRequirement}"
-                           var="tc"
-                           itemLabel="#{tc.id} - #{tc.title}"
-                           itemValue="#{tc.id}" />
-        </p:selectOneMenu>
+<p:outputLabel for="tc" value="Testfall:" />
+<p:selectOneMenu id="tc"
+                 value="#{testManagerController.selectedTestCaseDbId}"
+                 style="width: 95%;">
+    <f:selectItem itemLabel="Testfall wählen" itemValue="#{null}" />
+
+    <f:selectItems
+        value="#{testManagerController.testCasesForSelectedRequirement}"
+        var="tc"
+        itemLabel="#{tc.id} – #{tc.title}"
+        itemValue="#{tc.dbId}" />
+</p:selectOneMenu>
         <br/><br/>
 
         <!-- TESTER AUSWÄHLEN -->
