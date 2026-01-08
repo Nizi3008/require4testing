@@ -27,9 +27,6 @@ public class TestRun implements Serializable {
     @Column(nullable = false)
     private String testResult;   // OFFEN / PASSED / FAILED
 
-    @Column(length = 2000)
-    private String testComment;
-
     public TestRun() {}
 
     // ===== Getter / Setter =====
@@ -70,11 +67,4 @@ public class TestRun implements Serializable {
         this.testResult = testResult;
     }
 
-    public String getTestComment() {
-        return testComment;
-    }
-
-    public void setTestComment(String testComment) {
-        this.testComment = testComment;
-    }
 }

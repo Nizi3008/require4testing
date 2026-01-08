@@ -1,15 +1,14 @@
 package require4testing.controller.roles;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import require4testing.model.TestCase;
 import require4testing.model.TestRun;
-import require4testing.service.TestCaseService;
 import require4testing.service.TestRunService;
 
 @Named("testerController")
@@ -19,46 +18,35 @@ public class TesterController implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Inject
-    private TestCaseService testCaseService;
-
-    @Inject
     private TestRunService testRunService;
 
-    private TestRun newTestRun = new TestRun();
-    private Long selectedTestCaseDbId;
+    private String testerName;
+    private List<TestRun> assignedTestRuns = new ArrayList<>();
 
-    // =======================
-    // TESTLAUF SPEICHERN
-    // =======================
-    public String saveTestRun() {
-
-        TestCase tc = testCaseService.findByDbId(selectedTestCaseDbId);
-        newTestRun.setTestCase(tc);
-
-        testRunService.save(newTestRun);
-
-        newTestRun = new TestRun();
-        selectedTestCaseDbId = null;
-
-        return "/views/tester/dashboard.xhtml?faces-redirect=true";
+    public void setTesterName(String testerName) {
+        this.testerName = testerName;
+        reload();
     }
 
-    // =======================
-    // GETTER
-    // =======================
-    public List<TestCase> getTestCases() {
-        return testCaseService.findAll();
+    public String getTesterName() {
+        return testerName;
     }
 
-    public TestRun getNewTestRun() {
-        return newTestRun;
+    public List<TestRun> getAssignedTestRuns() {
+        return assignedTestRuns;
     }
 
-    public Long getSelectedTestCaseDbId() {
-        return selectedTestCaseDbId;
+    public void reload() {
+        if (testerName == null || testerName.isBlank()) {
+            assignedTestRuns = new ArrayList<>();
+        } else {
+            assignedTestRuns = testRunService.findByTesterName(testerName);
+        }
     }
 
-    public void setSelectedTestCaseDbId(Long selectedTestCaseDbId) {
-        this.selectedTestCaseDbId = selectedTestCaseDbId;
+    public void saveResult(Long dbId, String result) {
+        if (dbId == null || result == null || result.isBlank()) return;
+        testRunService.updateResult(dbId, result);
+        reload();
     }
 }

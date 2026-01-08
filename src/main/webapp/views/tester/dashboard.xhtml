@@ -13,39 +13,46 @@
 
 <h1>Tester Dashboard</h1>
 
-<h:form>
+<h:form id="form">
 
-    <p:dataTable value="#{testerController.assignedTestCases}"
-                 var="tc"
-                 style="width: 70em;"
-                 emptyMessage="Keine Testfälle zugewiesen.">
+   <p:dataTable id="tbl"
+             value="#{testerController.assignedTestRuns}"
+             var="tr"
+             rowKey="#{tr.dbId}"
+             style="width:95%;"
+             emptyMessage="Keine Testläufe zugewiesen."
+             responsiveLayout="scroll">
 
-        <p:column headerText="Testcase ID" style="width:10rem;">
-            <h:outputText value="#{tc.id}" />
-        </p:column>
+    <p:column headerText="TestRun ID" style="width:10rem;">
+        <h:outputText value="#{tr.id}" />
+    </p:column>
 
-        <p:column headerText="Titel" style="width:15rem;">
-            <h:outputText value="#{tc.title}" />
-        </p:column>
+    <p:column headerText="TestCase" style="width:22rem;">
+        <h:outputText value="#{tr.testCase.id}" /> – <h:outputText value="#{tr.testCase.title}" />
+    </p:column>
 
-        <p:column headerText="Beschreibung" style="width:25rem;">
-            <h:outputText value="#{tc.description}" />
-        </p:column>
+    <p:column headerText="Requirement" style="width:22rem;">
+        <h:outputText value="#{tr.testCase.requirement.id}" /> – <h:outputText value="#{tr.testCase.requirement.title}" />
+    </p:column>
+    
+    <p:column headerText="Ergebnis">
+        <p:selectOneMenu value="#{tr.testResult}" style="width:100%;">
+            <f:selectItem itemLabel="OFFEN" itemValue="OFFEN"/>
+            <f:selectItem itemLabel="Bestanden" itemValue="PASSED"/>
+            <f:selectItem itemLabel="Fehlgeschlagen" itemValue="FAILED"/>
+        </p:selectOneMenu>
+    </p:column>
 
-        <p:column headerText="Ergebnis" style="width:12rem;">
+    <p:column headerText="Aktion">
+        <p:commandButton value="Speichern"
+                         actionListener="#{testerController.saveResult(tr.dbId, tr.testResult)}"
+                         process="tbl"
+                         update="tbl"
+                         styleClass="ui-button-primary" />
+    </p:column>
+</p:dataTable>
 
-            <p:selectOneMenu value="#{tc.testResult}">
-                <f:selectItem itemLabel="Bitte wählen..." itemValue=""/>
-                <f:selectItem itemLabel="Bestanden" itemValue="passed"/>
-                <f:selectItem itemLabel="Fehlgeschlagen" itemValue="failed"/>
-
-                <p:ajax listener="#{testerController.updateResult(tc, tc.testResult)}"
-                        update="@form"/>
-            </p:selectOneMenu>
-
-        </p:column>
-
-    </p:dataTable>
+    <p:messages autoUpdate="true" />
 
 </h:form>
 
