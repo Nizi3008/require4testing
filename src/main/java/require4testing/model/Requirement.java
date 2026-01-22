@@ -37,7 +37,7 @@ public class Requirement implements Serializable {
         this.description = description;
     }
 
-    // --- Getter & Setter ---
+    // Getter / Setter
 
     public Long getDbId() {
         return dbId;

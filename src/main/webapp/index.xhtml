@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Startseite</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+</h:head>
+
+<h:body>
+
+<h1>Require4Testing – Startseite</h1>
+
+<h:form>
+
+    <h2>Rollen</h2>
+
+    <p:button value="Requirements Engineer"
+              outcome="/views/requirements/dashboard.xhtml"
+              styleClass="ui-button-primary" />
+
+    <p:button value="Testfallersteller"
+              outcome="/views/testcases/dashboard.xhtml"
+              style="margin-left:0.5rem;"
+              styleClass="ui-button-primary" />
+
+    <p:button value="Testmanager"
+              outcome="/views/testmanager/dashboard.xhtml"
+              style="margin-left:0.5rem;"
+              styleClass="ui-button-primary" />
+
+    <hr/>
+
+    <h2>Tester</h2>
+
+    <p:button value="Tester 1"
+              outcome="/views/tester/dashboard.xhtml"
+              styleClass="p-button-secondary">
+        <f:param name="tester" value="Tester1" />
+    </p:button>
+
+    <p:button value="Tester 2"
+              outcome="/views/tester/dashboard.xhtml"
+              style="margin-left:0.5rem;"
+              styleClass="p-button-secondary">
+        <f:param name="tester" value="Tester2" />
+    </p:button>
+
+    <p:button value="Tester 3"
+              outcome="/views/tester/dashboard.xhtml"
+              style="margin-left:0.5rem;"
+              styleClass="p-button-secondary">
+        <f:param name="tester" value="Tester3" />
+    </p:button>
+
+</h:form>
+
+</h:body>
+</html>

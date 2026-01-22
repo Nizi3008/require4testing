@@ -7,147 +7,140 @@ import java.util.List;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-
 import require4testing.model.TestCase;
 import require4testing.model.TestRun;
-import require4testing.model.User;
+import require4testing.model.TestRunItem;
 import require4testing.service.TestCaseService;
+import require4testing.service.TestRunItemService;
 import require4testing.service.TestRunService;
 
 @Named("testManagerController")
 @SessionScoped
 public class TestManagerController implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    // Fixe Tester-Liste (Prototype)
-    private final List<User> testers = new ArrayList<>();
+	@Inject
+	private TestCaseService testCaseService;
 
-    @Inject
-    private TestCaseService testCaseService;
+	@Inject
+	private TestRunService testRunService;
 
-    @Inject
-    private TestRunService testRunService;
+	@Inject
+	private TestRunItemService testRunItemService;
 
-    // Auswahlfelder (JSF)
-    private String selectedRequirementId;
-    private Long selectedTestCaseDbId;
-    private String selectedTester;
+	// Prototyp: feste Tester-Namen
+	private final List<String> testers = List.of("Tester1", "Tester2", "Tester3");
 
-    public TestManagerController() {
-        testers.add(new User("Tester1", "111", "tester"));
-        testers.add(new User("Tester2", "222", "tester"));
-        testers.add(new User("Tester3", "333", "tester"));
-    }
+	// Auswahlfelder (JSF)
+	private String selectedRequirementId;
+	private List<Long> selectedTestCaseDbIds = new ArrayList<>();
+	private String selectedTester;
 
-    // =======================
-    // Dropdown: TestCases je Requirement (aus DB)
-    // =======================
-    public List<TestCase> getTestCasesForSelectedRequirement() {
-        List<TestCase> list = new ArrayList<>();
+	public void onRequirementChange() {
+		selectedTestCaseDbIds.clear();
+	}
 
-        if (selectedRequirementId == null || selectedRequirementId.isBlank()) {
-            return list;
-        }
+	public List<TestCase> getTestCasesForSelectedRequirement() {
+		List<TestCase> list = new ArrayList<>();
 
-        for (TestCase tc : testCaseService.findAll()) {
-            if (tc.getRequirement() != null
-                    && selectedRequirementId.equals(tc.getRequirement().getId())) {
-                list.add(tc);
-            }
-        }
-        return list;
-    }
+		if (selectedRequirementId == null || selectedRequirementId.isBlank()) {
+			return list;
+		}
 
-    // =======================
-    // TestRun speichern (persistieren!)
-    // =======================
-    public String saveTestRun() {
+		for (TestCase tc : testCaseService.findAll()) {
+			if (tc.getRequirement() != null && selectedRequirementId.equals(tc.getRequirement().getId())) {
+				list.add(tc);
+			}
+		}
+		return list;
+	}
 
-        // Pflichtfelder prüfen
-        if (selectedTestCaseDbId == null) {
-            return null;
-        }
-        if (selectedTester == null || selectedTester.isBlank()) {
-            return null;
-        }
+	// 1 TestRun + mehrere Items speichern
+	public String saveTestRun() {
 
-        // TestCase laden
-        TestCase selectedTestCase = testCaseService.findByDbId(selectedTestCaseDbId);
-        if (selectedTestCase == null) {
-            return null;
-        }
+		if (selectedRequirementId == null || selectedRequirementId.isBlank())
+			return null;
+		if (selectedTestCaseDbIds == null || selectedTestCaseDbIds.isEmpty())
+			return null;
+		if (selectedTester == null || selectedTester.isBlank())
+			return null;
 
-        // TestRun bauen
-        TestRun tr = new TestRun();
-        tr.setId(generateNextTestRunIdFromDb()); // TR-###
-        tr.setTestCase(selectedTestCase);
-        tr.setTesterName(selectedTester);
-        tr.setTestResult("OFFEN");
+		// 1) Container-Testlauf anlegen
+		TestRun tr = new TestRun();
+		tr.setId(generateNextTestRunIdFromDb());
+		tr.setTesterName(selectedTester);
 
-        // Persistieren
-        testRunService.save(tr);
+		// Persistiere TestRun zuerst (damit dbId vorhanden ist)
+		testRunService.save(tr);
 
-        // Reset
-        selectedRequirementId = null;
-        selectedTestCaseDbId = null;
-        selectedTester = null;
+		// 2) Items je ausgewähltem TestCase anlegen
+		for (Long tcDbId : selectedTestCaseDbIds) {
+			TestCase tc = testCaseService.findByDbId(tcDbId);
+			if (tc == null)
+				continue;
 
-        return "/views/testmanager/dashboard.xhtml?faces-redirect=true";
-    }
+			TestRunItem item = new TestRunItem();
+			item.setTestRun(tr);
+			item.setTestCase(tc);
+			item.setTestResult("OFFEN");
 
-    // =======================
-    // Business-ID aus DB ableiten (TR-###)
-    // =======================
-    private String generateNextTestRunIdFromDb() {
-        String max = testRunService.findMaxBusinessId(); // z.B. "TR-014"
-        int next = 1;
+			testRunItemService.save(item);
+		}
 
-        if (max != null && max.startsWith("TR-") && max.length() >= 6) {
-            try {
-                next = Integer.parseInt(max.substring(3)) + 1;
-            } catch (NumberFormatException ignored) {
-                next = 1;
-            }
-        }
-        return String.format("TR-%03d", next);
-    }
+		// Reset
+		selectedRequirementId = null;
+		selectedTestCaseDbIds.clear();
+		selectedTester = null;
 
-    // =======================
-    // Dashboard: Liste aus DB
-    // =======================
-    public List<TestRun> getTestRuns() {
-        return testRunService.findAll();
-    }
+		return "/views/testmanager/dashboard.xhtml?faces-redirect=true";
+	}
 
-    // =======================
-    // Getter/Setter (JSF)
-    // =======================
-    public String getSelectedRequirementId() {
-        return selectedRequirementId;
-    }
+	private String generateNextTestRunIdFromDb() {
+		String max = testRunService.findMaxBusinessId(); // z.B. "TR-014"
+		int next = 1;
 
-    public void setSelectedRequirementId(String selectedRequirementId) {
-        this.selectedRequirementId = selectedRequirementId;
-    }
+		if (max != null && max.startsWith("TR-") && max.length() >= 6) {
+			try {
+				next = Integer.parseInt(max.substring(3)) + 1;
+			} catch (NumberFormatException ignored) {
+				next = 1;
+			}
+		}
+		return String.format("TR-%03d", next);
+	}
 
-    public Long getSelectedTestCaseDbId() {
-        return selectedTestCaseDbId;
-    }
+	// Dashboard: zeigt Testläufe (Container)
+	public List<TestRun> getTestRuns() {
+		return testRunService.findAll();
+	}
 
-    public void setSelectedTestCaseDbId(Long selectedTestCaseDbId) {
-        this.selectedTestCaseDbId = selectedTestCaseDbId;
-    }
+	// Getter/Setter
+	public String getSelectedRequirementId() {
+		return selectedRequirementId;
+	}
 
-    public String getSelectedTester() {
-        return selectedTester;
-    }
+	public void setSelectedRequirementId(String selectedRequirementId) {
+		this.selectedRequirementId = selectedRequirementId;
+	}
 
-    public void setSelectedTester(String selectedTester) {
-        this.selectedTester = selectedTester;
-    }
+	public List<Long> getSelectedTestCaseDbIds() {
+		return selectedTestCaseDbIds;
+	}
 
-    public List<User> getTesters() {
-        return testers;
-    }
+	public void setSelectedTestCaseDbIds(List<Long> selectedTestCaseDbIds) {
+		this.selectedTestCaseDbIds = selectedTestCaseDbIds;
+	}
+
+	public String getSelectedTester() {
+		return selectedTester;
+	}
+
+	public void setSelectedTester(String selectedTester) {
+		this.selectedTester = selectedTester;
+	}
+
+	public List<String> getTesters() {
+		return testers;
+	}
 }

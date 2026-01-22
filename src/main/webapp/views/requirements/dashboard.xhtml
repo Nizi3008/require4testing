@@ -1,48 +1,50 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-    <title>Requirements Engineer Dashboard</title>
-    <link rel="stylesheet" type="text/css" href="../../styles.css" />
+	<title>Requirements Engineer Dashboard</title>
+	<link rel="stylesheet" type="text/css" href="../../styles.css" />
 </h:head>
 
 <h:body>
 
-<h1>Requirements Engineer Dashboard</h1>
+	<h1>Requirements Engineer Dashboard</h1>
 
-<!-- Tabelle der Anforderungen -->
-<h:form>
-    <p:dataTable value="#{requirementsEngineerController.requirements}"
-                 var="r"
-                 style="width: 60em;"
-                 emptyMessage="Noch keine Anforderungen vorhanden.">
+	<!-- Tabelle der Anforderungen -->
+	<h:form>
+		<p:dataTable value="#{requirementsEngineerController.requirements}"
+			var="r" style="width: 60em;"
+			emptyMessage="Noch keine Anforderungen vorhanden.">
 
-        <p:column headerText="ID">
-            <h:outputText value="#{r.id}" />
-        </p:column>
+			<p:column headerText="Requirement ID">
+				<h:outputText value="#{r.id}" />
+			</p:column>
 
-        <p:column headerText="Titel">
-            <h:outputText value="#{r.title}" />
-        </p:column>
+			<p:column headerText="Requirement Titel">
+				<h:outputText value="#{r.title}" />
+			</p:column>
 
-        <p:column headerText="Beschreibung">
-            <h:outputText value="#{r.description}" />
-        </p:column>
+			<p:column headerText="Beschreibung">
+				<h:outputText value="#{r.description}" />
+			</p:column>
 
-    </p:dataTable>
-</h:form>
+		</p:dataTable>
+	</h:form>
 
-<br/>
+	<br />
 
-<!-- Button zum Anlegen einer neuen Anforderung -->
-<h:form>
-    <p:commandButton value="Neue Anforderung anlegen"
-                     action="/views/requirements/createRequirement.xhtml?faces-redirect=true"
-                     ajax="false"
-                     styleClass="ui-button-primary" />
-</h:form>
+	<!-- Button zum Anlegen einer neuen Anforderung -->
+	<h:form>
+		<p:commandButton value="Neue Anforderung anlegen"
+			action="/views/requirements/createRequirement.xhtml?faces-redirect=true"
+			ajax="false" styleClass="ui-button-primary" />
+
+		<p:commandButton value="Zurück zur Startseite"
+			action="/index.xhtml?faces-redirect=true" icon="pi pi-home"
+			styleClass="p-button-secondary" style="margin:0.3rem" />
+	</h:form>
 
 </h:body>
 </html>

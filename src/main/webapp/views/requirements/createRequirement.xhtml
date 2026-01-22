@@ -15,7 +15,7 @@
 <h:form>
     <p:panel header="Neue Anforderung" style="width: 40em;">
 
-        <!-- TITEL -->
+        <!-- Titel -->
         <p:outputLabel for="title" value="Titel:" />
         <p:inputText id="title"
                      value="#{requirementsEngineerController.newRequirement.title}"
@@ -24,7 +24,7 @@
                      style="width: 95%;" />
         <br/><br/>
 
-        <!-- BESCHREIBUNG -->
+        <!-- Beschreibung -->
         <p:outputLabel for="desc" value="Beschreibung:" />
         <p:inputTextarea id="desc"
                          value="#{requirementsEngineerController.newRequirement.description}"
@@ -32,7 +32,7 @@
                          style="width: 95%;" />
         <br/><br/>
 
-        <!-- BUTTONS -->
+        <!-- Buttons -->
         <p:commandButton value="Speichern"
                          action="#{requirementsEngineerController.saveRequirement}"
                          ajax="false"

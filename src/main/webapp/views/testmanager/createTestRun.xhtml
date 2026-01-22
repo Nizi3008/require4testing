@@ -13,39 +13,39 @@
 
 <h1>Neuen Testlauf erstellen</h1>
 
-<h:form>
+<h:form id="form">
     <p:panel header="Testlauf" style="width: 40em;">
 
-        <!-- REQUIREMENT AUSWÄHLEN -->
+        <!-- REQUIREMENT AUSWÄHLEN (Filter) -->
         <p:outputLabel for="req" value="Requirement:" />
         <p:selectOneMenu id="req"
                          value="#{testManagerController.selectedRequirementId}"
                          style="width: 95%;">
-            <f:selectItem itemLabel="Bitte wählen..." itemValue="" />
+            <f:selectItem itemLabel="Bitte wählen..." itemValue="#{null}" noSelectionOption="true" />
             <f:selectItems value="#{requirementsEngineerController.requirements}"
                            var="r"
                            itemLabel="#{r.id} - #{r.title}"
                            itemValue="#{r.id}" />
 
-            <!-- Nur aktualisieren, KEIN listener -->
-            <p:ajax update="@form:tc" />
+            <!-- Requirement-Wechsel -> Testfälle neu laden -->
+            <p:ajax listener="#{testManagerController.onRequirementChange}"
+                    update="tcBox msg" />
         </p:selectOneMenu>
+
         <br/><br/>
 
-        <!-- TESTFALL AUSWÄHLEN -->
-        <p:outputLabel for="tc" value="Testfall:" />
-<p:outputLabel for="tc" value="Testfall:" />
-<p:selectOneMenu id="tc"
-                 value="#{testManagerController.selectedTestCaseDbId}"
-                 style="width: 95%;">
-    <f:selectItem itemLabel="Testfall wählen" itemValue="#{null}" />
+        <!-- TESTFÄLLE (Mehrfachauswahl als Checkboxen) -->
+        <p:outputLabel for="tcBox" value="Testfälle:" />
+        <p:selectManyCheckbox id="tcBox"
+                              value="#{testManagerController.selectedTestCaseDbIds}"
+                              layout="pageDirection"
+                              style="width: 95%;">
+            <f:selectItems value="#{testManagerController.testCasesForSelectedRequirement}"
+                           var="tc"
+                           itemLabel="#{tc.id} – #{tc.title}"
+                           itemValue="#{tc.dbId}" />
+        </p:selectManyCheckbox>
 
-    <f:selectItems
-        value="#{testManagerController.testCasesForSelectedRequirement}"
-        var="tc"
-        itemLabel="#{tc.id} – #{tc.title}"
-        itemValue="#{tc.dbId}" />
-</p:selectOneMenu>
         <br/><br/>
 
         <!-- TESTER AUSWÄHLEN -->
@@ -53,12 +53,13 @@
         <p:selectOneMenu id="tester"
                          value="#{testManagerController.selectedTester}"
                          style="width: 95%;">
-            <f:selectItem itemLabel="Bitte wählen..." itemValue="" />
+            <f:selectItem itemLabel="Bitte wählen..." itemValue="#{null}" noSelectionOption="true" />
             <f:selectItems value="#{testManagerController.testers}"
-                           var="u"
-                           itemLabel="#{u.name}"
-                           itemValue="#{u.name}" />
+                           var="t"
+                           itemLabel="#{t}"
+                           itemValue="#{t}" />
         </p:selectOneMenu>
+
         <br/><br/>
 
         <!-- BUTTONS -->
@@ -71,7 +72,7 @@
                   outcome="/views/testmanager/dashboard.xhtml?faces-redirect=true"
                   style="margin-left: 1em;" />
 
-        <p:messages autoUpdate="true" />
+        <p:messages id="msg" autoUpdate="true" />
 
     </p:panel>
 </h:form>

@@ -7,46 +7,46 @@ import java.util.List;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-
-import require4testing.model.TestRun;
-import require4testing.service.TestRunService;
+import require4testing.model.TestRunItem;
+import require4testing.service.TestRunItemService;
 
 @Named("testerController")
 @SessionScoped
 public class TesterController implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @Inject
-    private TestRunService testRunService;
+	@Inject
+	private TestRunItemService testRunItemService;
 
-    private String testerName;
-    private List<TestRun> assignedTestRuns = new ArrayList<>();
+	private String testerName;
+	private List<TestRunItem> assignedItems = new ArrayList<>();
 
-    public void setTesterName(String testerName) {
-        this.testerName = testerName;
-        reload();
-    }
+	public void reload() {
+		if (testerName == null || testerName.isBlank()) {
+			assignedItems = new ArrayList<>();
+			return;
+		}
+		assignedItems = testRunItemService.findByTesterName(testerName);
+	}
 
-    public String getTesterName() {
-        return testerName;
-    }
+	public List<TestRunItem> getAssignedItems() {
+		return assignedItems;
+	}
 
-    public List<TestRun> getAssignedTestRuns() {
-        return assignedTestRuns;
-    }
+	public void saveResult(Long itemDbId, String result) {
+		if (itemDbId == null || result == null || result.isBlank())
+			return;
+		testRunItemService.updateResult(itemDbId, result);
+		reload();
+	}
 
-    public void reload() {
-        if (testerName == null || testerName.isBlank()) {
-            assignedTestRuns = new ArrayList<>();
-        } else {
-            assignedTestRuns = testRunService.findByTesterName(testerName);
-        }
-    }
+	public String getTesterName() {
+		return testerName;
+	}
 
-    public void saveResult(Long dbId, String result) {
-        if (dbId == null || result == null || result.isBlank()) return;
-        testRunService.updateResult(dbId, result);
-        reload();
-    }
+	public void setTesterName(String testerName) {
+		this.testerName = testerName;
+		reload();
+	}
 }

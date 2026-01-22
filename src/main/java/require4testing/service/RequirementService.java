@@ -12,19 +12,15 @@ import require4testing.model.Requirement;
 @ApplicationScoped
 public class RequirementService {
 
-    private EntityManagerFactory emf;
+    private static final EntityManagerFactory EMF =
+            Persistence.createEntityManagerFactory("require4testingPU");
 
-    public RequirementService() {
-        this.emf = Persistence.createEntityManagerFactory("require4testingPU");
+    private EntityManager em() {
+        return EMF.createEntityManager();
     }
 
-    private EntityManager createEntityManager() {
-        return emf.createEntityManager();
-    }
-
-    // --- CREATE ---
     public void save(Requirement requirement) {
-        EntityManager em = createEntityManager();
+        EntityManager em = em();
         try {
             em.getTransaction().begin();
             em.persist(requirement);
@@ -34,26 +30,21 @@ public class RequirementService {
         }
     }
 
-    // --- READ ---
     public List<Requirement> findAll() {
-        EntityManager em = createEntityManager();
+        EntityManager em = em();
         try {
-            return em.createQuery(
-                "SELECT r FROM Requirement r", Requirement.class
-            ).getResultList();
+            return em.createQuery("SELECT r FROM Requirement r ORDER BY r.dbId DESC", Requirement.class)
+                     .getResultList();
         } finally {
             em.close();
         }
     }
-    
- // --- BUSINESS-ID erzeugen ---
-    public String generateNextRequirementId() {
-        EntityManager em = createEntityManager();
-        try {
-            Long count = em.createQuery(
-                "SELECT COUNT(r) FROM Requirement r", Long.class
-            ).getSingleResult();
 
+    public String generateNextRequirementId() {
+        EntityManager em = em();
+        try {
+            Long count = em.createQuery("SELECT COUNT(r) FROM Requirement r", Long.class)
+                           .getSingleResult();
             long next = count + 1;
             return String.format("REQ-%03d", next);
         } finally {
@@ -61,14 +52,15 @@ public class RequirementService {
         }
     }
 
-    // --- FIND by business ID ---
     public Requirement findByBusinessId(String id) {
-        EntityManager em = createEntityManager();
+        if (id == null || id.isBlank()) return null;
+
+        EntityManager em = em();
         try {
             List<Requirement> result = em.createQuery(
-                "SELECT r FROM Requirement r WHERE r.id = :id", Requirement.class
-            ).setParameter("id", id)
-             .getResultList();
+                    "SELECT r FROM Requirement r WHERE r.id = :id",
+                    Requirement.class
+            ).setParameter("id", id).getResultList();
 
             return result.isEmpty() ? null : result.get(0);
         } finally {

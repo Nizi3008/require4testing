@@ -13,7 +13,6 @@
 
 <h1>Testfallersteller Dashboard</h1>
 
-<!-- Tabelle der Testfälle -->
 <h:form>
     <p:dataTable value="#{testCaseAuthorController.testCases}"
                  var="tc"
@@ -32,12 +31,10 @@
             <h:outputText value="#{tc.description}" />
         </p:column>
 
-        <!-- REQUIREMENT-ID -->
         <p:column headerText="Requirement ID">
             <h:outputText value="#{tc.requirement.id}" />
         </p:column>
 
-        <!-- REQUIREMENT-TITEL -->
 <p:column headerText="Requirement Titel">
     <h:outputText value="#{tc.requirement.title}" />
 </p:column>
@@ -53,6 +50,12 @@
                      action="/views/testcases/createTestCase.xhtml?faces-redirect=true"
                      ajax="false"
                      styleClass="ui-button-primary" />
+                     
+	 <p:commandButton value="Zurück zur Startseite"
+                 action="/index.xhtml?faces-redirect=true"
+                 icon="pi pi-home"
+                 styleClass="p-button-secondary"
+                 style="margin:0.3rem"/>
 </h:form>
 
 </h:body>
