@@ -6,7 +6,6 @@ import java.util.List;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-
 import require4testing.model.Requirement;
 import require4testing.model.TestCase;
 import require4testing.service.RequirementService;
@@ -16,74 +15,62 @@ import require4testing.service.TestCaseService;
 @SessionScoped
 public class TestCaseAuthorController implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @Inject
-    private TestCaseService testCaseService;
+	@Inject
+	private TestCaseService testCaseService;
 
-    @Inject
-    private RequirementService requirementService;
+	@Inject
+	private RequirementService requirementService;
 
-    private TestCase newTestCase = new TestCase();
-    private String selectedRequirementId;
+	private TestCase newTestCase = new TestCase();
+	private String selectedRequirementId;
 
-    // =======================
-    // TESTFALL SPEICHERN (persistent)
-    // =======================
-    public String saveTestCase() {
+	// CREATE
+	public String saveTestCase() {
 
-        // Requirement aus DB laden
-        Requirement requirement =
-                requirementService.findByBusinessId(selectedRequirementId);
+		Requirement requirement = requirementService.findByBusinessId(selectedRequirementId);
+		newTestCase.setRequirement(requirement);
 
-        newTestCase.setRequirement(requirement);
+		String generatedId = String.format("TC-%03d", testCaseService.findAll().size() + 1);
+		newTestCase.setId(generatedId);
 
-        // Business-ID generieren
-        String generatedId =
-                String.format("TC-%03d", testCaseService.findAll().size() + 1);
+		testCaseService.save(newTestCase);
 
-        newTestCase.setId(generatedId);
+		resetForm();
 
-        // Persistieren
-        testCaseService.save(newTestCase);
+		return "/views/testcases/dashboard.xhtml?faces-redirect=true";
+	}
 
-        // Reset
-        newTestCase = new TestCase();
-        selectedRequirementId = null;
+	// READ
+	public List<TestCase> getTestCases() {
+		return testCaseService.findAll();
+	}
 
-        return "/views/testcases/dashboard.xhtml?faces-redirect=true";
-    }
+	public List<Requirement> getAllRequirements() {
+		return requirementService.findAll();
+	}
 
-    // =======================
-    // READ (Dashboard)
-    // =======================
-    public List<TestCase> getTestCases() {
-        return testCaseService.findAll();
-    }
+	// Helpers
+	private void resetForm() {
+		newTestCase = new TestCase();
+		selectedRequirementId = null;
+	}
 
-    // =======================
-    // REQUIREMENTS für Dropdown
-    // =======================
-    public List<Requirement> getAllRequirements() {
-        return requirementService.findAll();
-    }
+	// Getter / Setter
+	public TestCase getNewTestCase() {
+		return newTestCase;
+	}
 
-    // =======================
-    // Getter / Setter
-    // =======================
-    public TestCase getNewTestCase() {
-        return newTestCase;
-    }
+	public void setNewTestCase(TestCase newTestCase) {
+		this.newTestCase = newTestCase;
+	}
 
-    public void setNewTestCase(TestCase newTestCase) {
-        this.newTestCase = newTestCase;
-    }
+	public String getSelectedRequirementId() {
+		return selectedRequirementId;
+	}
 
-    public String getSelectedRequirementId() {
-        return selectedRequirementId;
-    }
-
-    public void setSelectedRequirementId(String selectedRequirementId) {
-        this.selectedRequirementId = selectedRequirementId;
-    }
+	public void setSelectedRequirementId(String selectedRequirementId) {
+		this.selectedRequirementId = selectedRequirementId;
+	}
 }

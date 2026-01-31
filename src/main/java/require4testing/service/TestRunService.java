@@ -17,23 +17,19 @@ public class TestRunService {
 		return EMF.createEntityManager();
 	}
 
-	// =======================
 	// CREATE
-	// =======================
 	public void save(TestRun testRun) {
 		EntityManager em = em();
 		try {
 			em.getTransaction().begin();
-			em.persist(testRun); // Items werden wegen CascadeType.ALL automatisch mitpersistiert
+			em.persist(testRun);
 			em.getTransaction().commit();
 		} finally {
 			em.close();
 		}
 	}
 
-	// =======================
-	// UPDATE (ganzer TestRun)
-	// =======================
+	// UPDATE
 	public void update(TestRun testRun) {
 		EntityManager em = em();
 		try {
@@ -45,12 +41,10 @@ public class TestRunService {
 		}
 	}
 
-	// =======================
-	// UPDATE Ergebnis pro Item (wichtig für Tester!)
-	// =======================
 	public void updateItemResult(Long itemDbId, String result) {
-		if (itemDbId == null || result == null || result.isBlank())
+		if (itemDbId == null || result == null || result.isBlank()) {
 			return;
+		}
 
 		EntityManager em = em();
 		try {
@@ -63,12 +57,11 @@ public class TestRunService {
 		}
 	}
 
-	// =======================
-	// READ: by PK
-	// =======================
+	// READ
 	public TestRun findByDbId(Long dbId) {
-		if (dbId == null)
+		if (dbId == null) {
 			return null;
+		}
 
 		EntityManager em = em();
 		try {
@@ -78,9 +71,6 @@ public class TestRunService {
 		}
 	}
 
-	// =======================
-	// READ: alle TestRuns inkl. Items + TestCase (für Dashboard)
-	// =======================
 	public List<TestRun> findAll() {
 		EntityManager em = em();
 		try {
@@ -93,12 +83,10 @@ public class TestRunService {
 		}
 	}
 
-	// =======================
-	// READ: TestRuns pro Tester inkl. Items + TestCase (für Tester-Dashboard)
-	// =======================
 	public List<TestRun> findByTesterName(String testerName) {
-		if (testerName == null || testerName.isBlank())
+		if (testerName == null || testerName.isBlank()) {
 			return List.of();
+		}
 
 		EntityManager em = em();
 		try {
@@ -110,9 +98,7 @@ public class TestRunService {
 		}
 	}
 
-	// =======================
-	// Business-ID max (TR-###)
-	// =======================
+	// Helper (ID)
 	public String findMaxBusinessId() {
 		EntityManager em = em();
 		try {

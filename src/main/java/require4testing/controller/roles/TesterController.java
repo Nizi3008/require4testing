@@ -22,6 +22,7 @@ public class TesterController implements Serializable {
 	private String testerName;
 	private List<TestRunItem> assignedItems = new ArrayList<>();
 
+	// READ
 	public void reload() {
 		if (testerName == null || testerName.isBlank()) {
 			assignedItems = new ArrayList<>();
@@ -34,13 +35,16 @@ public class TesterController implements Serializable {
 		return assignedItems;
 	}
 
+	// UPDATE
 	public void saveResult(Long itemDbId, String result) {
-		if (itemDbId == null || result == null || result.isBlank())
+		if (itemDbId == null || result == null || result.isBlank()) {
 			return;
+		}
 		testRunItemService.updateResult(itemDbId, result);
 		reload();
 	}
 
+	// Getter / Setter
 	public String getTesterName() {
 		return testerName;
 	}

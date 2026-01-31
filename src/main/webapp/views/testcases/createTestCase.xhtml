@@ -11,57 +11,54 @@
 
 <h:body>
 
-<h1>Testfall erstellen</h1>
+    <h1>Testfall erstellen</h1>
 
-<h:form>
-    <p:panel header="Testfall" style="width: 40em;">
+    <h:form>
+        <p:panel header="Testfall" style="width: 40em;">
 
-        <!-- REQUIREMENT AUSWÄHLEN -->
-        <p:outputLabel for="requirement" value="Requirement:" />
+            <!-- Requirement auswählen -->
+            <p:outputLabel for="requirement" value="Requirement:" />
 
-        <p:selectOneMenu id="requirement"
-                         value="#{testCaseAuthorController.selectedRequirementId}"
-                         required="true"
-                         style="width: 95%;">
+            <p:selectOneMenu id="requirement"
+                             value="#{testCaseAuthorController.selectedRequirementId}"
+                             required="true"
+                             style="width: 95%;">
+                <f:selectItem itemLabel="Requirement wählen" itemValue="" />
+                <f:selectItems value="#{testCaseAuthorController.allRequirements}"
+                               var="req"
+                               itemLabel="#{req.id} - #{req.title}"
+                               itemValue="#{req.id}" />
+            </p:selectOneMenu>
 
-            <f:selectItem itemLabel="Requirement wählen" itemValue="" />
+            <br/><br/>
 
-            <f:selectItems
-                value="#{testCaseAuthorController.allRequirements}"
-                var="req"
-                itemLabel="#{req.id} - #{req.title}"
-                itemValue="#{req.id}" />
-        </p:selectOneMenu>
-
-        <br/><br/>
-
-        <!-- TITEL -->
-        <p:outputLabel for="title" value="Titel:" />
-        <p:inputText id="title"
-                     value="#{testCaseAuthorController.newTestCase.title}"
-                     style="width: 95%;" />
-        <br/><br/>
-
-        <!-- BESCHREIBUNG -->
-        <p:outputLabel for="desc" value="Beschreibung:" />
-        <p:inputTextarea id="desc"
-                         value="#{testCaseAuthorController.newTestCase.description}"
-                         rows="4"
+            <!-- Titel -->
+            <p:outputLabel for="title" value="Titel:" />
+            <p:inputText id="title"
+                         value="#{testCaseAuthorController.newTestCase.title}"
                          style="width: 95%;" />
-        <br/><br/>
+            <br/><br/>
 
-        <!-- BUTTONS -->
-        <p:commandButton value="Speichern"
-                         action="#{testCaseAuthorController.saveTestCase}"
-                         ajax="false"
-                         styleClass="ui-button-primary" />
+            <!-- Beschreibung -->
+            <p:outputLabel for="desc" value="Beschreibung:" />
+            <p:inputTextarea id="desc"
+                             value="#{testCaseAuthorController.newTestCase.description}"
+                             rows="4"
+                             style="width: 95%;" />
+            <br/><br/>
 
-        <p:button value="Abbrechen"
-                  outcome="dashboard.xhtml?faces-redirect=true"
-                  style="margin-left:1em;" />
+            <!-- Buttons -->
+            <p:commandButton value="Speichern"
+                             action="#{testCaseAuthorController.saveTestCase}"
+                             ajax="false"
+                             styleClass="ui-button-primary" />
 
-    </p:panel>
-</h:form>
+            <p:button value="Abbrechen"
+                      outcome="/views/testcases/dashboard.xhtml"
+                      style="margin-left:1em;" />
+
+        </p:panel>
+    </h:form>
 
 </h:body>
 </html>

@@ -13,49 +13,41 @@
 
 <h1>Testfallersteller Dashboard</h1>
 
-<h:form>
-    <p:dataTable value="#{testCaseAuthorController.testCases}"
-                 var="tc"
-                 style="width: 70em;"
-                 emptyMessage="Noch keine Testfälle vorhanden.">
+<p:dataTable value="#{testCaseAuthorController.testCases}"
+             var="tc"
+             style="width:95%;"
+             emptyMessage="Noch keine Testfälle vorhanden.">
 
-        <p:column headerText="Testcase ID">
-            <h:outputText value="#{tc.id}" />
-        </p:column>
+    <p:column headerText="Testcase ID" style="width:12rem;">
+        <h:outputText value="#{tc.id}" />
+    </p:column>
 
-        <p:column headerText="Testcase Titel">
-            <h:outputText value="#{tc.title}" />
-        </p:column>
+    <p:column headerText="Titel" style="width:18rem;">
+        <h:outputText value="#{tc.title}" />
+    </p:column>
 
-        <p:column headerText="Beschreibung">
-            <h:outputText value="#{tc.description}" />
-        </p:column>
+    <p:column headerText="Beschreibung">
+        <h:outputText value="#{tc.description}" />
+    </p:column>
 
-        <p:column headerText="Requirement ID">
-            <h:outputText value="#{tc.requirement.id}" />
-        </p:column>
+    <p:column headerText="Requirement" style="width:18rem;">
+        <h:outputText value="#{tc.requirement.id} – #{tc.requirement.title}" />
+    </p:column>
 
-<p:column headerText="Requirement Titel">
-    <h:outputText value="#{tc.requirement.title}" />
-</p:column>
-
-    </p:dataTable>
-</h:form>
+</p:dataTable>
 
 <br/>
 
-<!-- Button zum Anlegen eines neuen Testfalls -->
 <h:form>
-    <p:commandButton value="Testfall anlegen"
-                     action="/views/testcases/createTestCase.xhtml?faces-redirect=true"
-                     ajax="false"
-                     styleClass="ui-button-primary" />
-                     
-	 <p:commandButton value="Zurück zur Startseite"
-                 action="/index.xhtml?faces-redirect=true"
-                 icon="pi pi-home"
-                 styleClass="p-button-secondary"
-                 style="margin:0.3rem"/>
+    <p:button value="Testfall anlegen"
+              outcome="/views/testcases/createTestCase.xhtml"
+              styleClass="ui-button-primary" />
+
+    <p:button value="Zurück zur Startseite"
+              outcome="/index.xhtml"
+              icon="pi pi-home"
+              styleClass="ui-button-primary"
+              style="margin-left:0.3rem;" />
 </h:form>
 
 </h:body>

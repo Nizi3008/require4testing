@@ -17,6 +17,7 @@ public class TestCaseService {
 		return EMF.createEntityManager();
 	}
 
+	// CREATE
 	public void save(TestCase testCase) {
 		EntityManager em = em();
 		try {
@@ -28,6 +29,7 @@ public class TestCaseService {
 		}
 	}
 
+	// READ
 	public List<TestCase> findAll() {
 		EntityManager em = em();
 		try {
@@ -38,8 +40,9 @@ public class TestCaseService {
 	}
 
 	public List<TestCase> findByRequirementId(String requirementId) {
-		if (requirementId == null || requirementId.isBlank())
+		if (requirementId == null || requirementId.isBlank()) {
 			return List.of();
+		}
 
 		EntityManager em = em();
 		try {
@@ -51,8 +54,9 @@ public class TestCaseService {
 	}
 
 	public TestCase findByDbId(Long dbId) {
-		if (dbId == null)
+		if (dbId == null) {
 			return null;
+		}
 
 		EntityManager em = em();
 		try {

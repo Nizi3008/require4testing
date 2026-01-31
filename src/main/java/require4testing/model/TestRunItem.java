@@ -13,7 +13,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "testrun_items", uniqueConstraints = @UniqueConstraint(columnNames = { "testrun_id", "testcase_id" }))
+@Table(name = "testrun_items", uniqueConstraints = @UniqueConstraint(columnNames = { "testrun_fk", "testcase_fk" }))
 public class TestRunItem implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -23,20 +23,19 @@ public class TestRunItem implements Serializable {
 	private Long dbId;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "testrun_id")
+	@JoinColumn(name = "testrun_fk", nullable = false)
 	private TestRun testRun;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "testcase_id")
+	@JoinColumn(name = "testcase_fk", nullable = false)
 	private TestCase testCase;
 
 	@Column(nullable = false)
-	private String testResult; // OFFEN / PASSED / FAILED
+	private String testResult; // OFFEN / Bestanden / Fehlgeschlagen
 
 	public TestRunItem() {
 	}
 
-	// ===== Getter / Setter =====
 	public Long getDbId() {
 		return dbId;
 	}

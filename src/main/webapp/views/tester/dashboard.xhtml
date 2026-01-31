@@ -9,69 +9,67 @@
     <link rel="stylesheet" type="text/css" href="../../styles.css" />
 </h:head>
 
+<f:metadata>
+    <f:viewParam name="tester" value="#{testerController.testerName}" />
+</f:metadata>
+
 <h:body>
 
-    <f:metadata>
-        <f:viewParam name="tester" value="#{testerController.testerName}" />
-    </f:metadata>
+<h1>Tester Dashboard</h1>
 
-    <h1>Tester Dashboard</h1>
+<h:form id="form">
 
-    <br/><br/>
+    <p:dataTable id="tbl"
+                 value="#{testerController.assignedItems}"
+                 var="it"
+                 rowKey="#{it.dbId}"
+                 style="width:95%;"
+                 emptyMessage="Keine Testfälle zugewiesen."
+                 responsiveLayout="scroll">
 
-    <h:form id="form">
+        <p:column headerText="TestRun ID" style="width:10rem;">
+            <h:outputText value="#{it.testRun.id}" />
+        </p:column>
 
-        <p:dataTable id="tbl"
-                     value="#{testerController.assignedItems}"
-                     var="it"
-                     rowKey="#{it.dbId}"
-                     style="width:95%;"
-                     emptyMessage="Keine Testfälle zugewiesen."
-                     responsiveLayout="scroll">
+        <p:column headerText="Tester" style="width:7rem;">
+            <h:outputText value="#{it.testRun.testerName}" />
+        </p:column>
 
-            <p:column headerText="TestRun ID" style="width:10rem;">
-                <h:outputText value="#{it.testRun.id}" />
-            </p:column>
+        <p:column headerText="TestCase" style="width:20rem;">
+            <h:outputText value="#{it.testCase.id} – #{it.testCase.title}" />
+        </p:column>
 
-            <p:column headerText="Tester" style="width:10rem;">
-                <h:outputText value="#{it.testRun.testerName}" />
-            </p:column>
+        <p:column headerText="Requirement" style="width:18rem;">
+            <h:outputText value="#{it.testCase.requirement.id} – #{it.testCase.requirement.title}" />
+        </p:column>
 
-            <p:column headerText="TestCase" style="width:20rem;">
-                <h:outputText value="#{it.testCase.id}" /> – <h:outputText value="#{it.testCase.title}" />
-            </p:column>
+        <p:column headerText="Ergebnis" style="width:10rem;">
+            <p:selectOneMenu value="#{it.testResult}" style="width:100%;">
+                <f:selectItem itemLabel="OFFEN" itemValue="OFFEN"/>
+                <f:selectItem itemLabel="Bestanden" itemValue="PASSED"/>
+                <f:selectItem itemLabel="Fehlgeschlagen" itemValue="FAILED"/>
+            </p:selectOneMenu>
+        </p:column>
 
-            <p:column headerText="Requirement" style="width:20rem;">
-                <h:outputText value="#{it.testCase.requirement.id}" /> – <h:outputText value="#{it.testCase.requirement.title}" />
-            </p:column>
+        <p:column headerText="Aktion" style="width:10rem;">
+            <p:commandButton value="Speichern"
+                             actionListener="#{testerController.saveResult(it.dbId, it.testResult)}"
+                             process="tbl"
+                             update="tbl"
+                             styleClass="ui-button-primary" />
+        </p:column>
 
-            <p:column headerText="Ergebnis" style="width:7rem;">
-                <p:selectOneMenu value="#{it.testResult}" style="width:100%;">
-                    <f:selectItem itemLabel="OFFEN" itemValue="OFFEN"/>
-                    <f:selectItem itemLabel="Bestanden" itemValue="PASSED"/>
-                    <f:selectItem itemLabel="Fehlgeschlagen" itemValue="FAILED"/>
-                </p:selectOneMenu>
-            </p:column>
+    </p:dataTable>
 
-            <p:column headerText="Aktion" style="width:10rem;">
-                <p:commandButton value="Speichern"
-                                 actionListener="#{testerController.saveResult(it.dbId, it.testResult)}"
-                                 process="tbl"
-                                 update="tbl"
-                                 styleClass="ui-button-primary" />
-            </p:column>
+    <p:messages autoUpdate="true" />
 
-        </p:dataTable>
+    <p:button value="Zurück zur Startseite"
+              outcome="/index.xhtml"
+              icon="pi pi-home"
+              styleClass="ui-button-primary"
+              style="margin-top:0.6rem;" />
 
-        <p:messages autoUpdate="true" />
-
-        <p:commandButton value="Zurück zur Startseite"
-                         action="/index.xhtml?faces-redirect=true"
-                         icon="pi pi-home"
-                         styleClass="p-button-secondary"
-                         style="margin:0.3rem"/>
-
-    </h:form>
+</h:form>
 
 </h:body>
 </html>

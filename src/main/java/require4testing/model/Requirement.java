@@ -13,57 +13,55 @@ import jakarta.persistence.Table;
 @Table(name = "requirements")
 public class Requirement implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long dbId; // technische Primär-ID
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long dbId; // technischer PK
 
-    @Column(name = "requirement_id", unique = true, nullable = false)
-    private String id; // fachliche ID: REQ-001
+	@Column(name = "requirement_id", nullable = false, unique = true)
+	private String id; // fachliche ID: REQ-001
 
-    @Column(nullable = false)
-    private String title;
+	@Column(nullable = false)
+	private String title;
 
-    @Column(length = 2000)
-    private String description;
+	@Column(length = 2000)
+	private String description;
 
-    public Requirement() {
-    }
+	public Requirement() {
+	}
 
-    public Requirement(String id, String title, String description) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-    }
+	public Requirement(String id, String title, String description) {
+		this.id = id;
+		this.title = title;
+		this.description = description;
+	}
 
-    // Getter / Setter
+	public Long getDbId() {
+		return dbId;
+	}
 
-    public Long getDbId() {
-        return dbId;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public String getId() {
-        return id;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public String getTitle() {
-        return title;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 }

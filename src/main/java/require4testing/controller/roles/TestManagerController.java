@@ -30,17 +30,19 @@ public class TestManagerController implements Serializable {
 	private TestRunItemService testRunItemService;
 
 	// Prototyp: feste Tester-Namen
-	private final List<String> testers = List.of("Tester1", "Tester2", "Tester3");
+	private static final List<String> TESTERS = List.of("Tester1", "Tester2", "Tester3");
 
 	// Auswahlfelder (JSF)
 	private String selectedRequirementId;
 	private List<Long> selectedTestCaseDbIds = new ArrayList<>();
 	private String selectedTester;
 
+	// UI Events
 	public void onRequirementChange() {
 		selectedTestCaseDbIds.clear();
 	}
 
+	// READ: TestCases je Requirement
 	public List<TestCase> getTestCasesForSelectedRequirement() {
 		List<TestCase> list = new ArrayList<>();
 
@@ -56,29 +58,32 @@ public class TestManagerController implements Serializable {
 		return list;
 	}
 
-	// 1 TestRun + mehrere Items speichern
+	// CREATE: 1 TestRun + mehrere Items
 	public String saveTestRun() {
 
-		if (selectedRequirementId == null || selectedRequirementId.isBlank())
+		if (selectedRequirementId == null || selectedRequirementId.isBlank()) {
 			return null;
-		if (selectedTestCaseDbIds == null || selectedTestCaseDbIds.isEmpty())
+		}
+		if (selectedTestCaseDbIds == null || selectedTestCaseDbIds.isEmpty()) {
 			return null;
-		if (selectedTester == null || selectedTester.isBlank())
+		}
+		if (selectedTester == null || selectedTester.isBlank()) {
 			return null;
+		}
 
-		// 1) Container-Testlauf anlegen
 		TestRun tr = new TestRun();
 		tr.setId(generateNextTestRunIdFromDb());
 		tr.setTesterName(selectedTester);
 
-		// Persistiere TestRun zuerst (damit dbId vorhanden ist)
+		// TestRun zuerst speichern (dbId wird erzeugt)
 		testRunService.save(tr);
 
-		// 2) Items je ausgewähltem TestCase anlegen
+		// Items je TestCase speichern
 		for (Long tcDbId : selectedTestCaseDbIds) {
 			TestCase tc = testCaseService.findByDbId(tcDbId);
-			if (tc == null)
+			if (tc == null) {
 				continue;
+			}
 
 			TestRunItem item = new TestRunItem();
 			item.setTestRun(tr);
@@ -88,12 +93,16 @@ public class TestManagerController implements Serializable {
 			testRunItemService.save(item);
 		}
 
-		// Reset
+		resetForm();
+
+		return "/views/testmanager/dashboard.xhtml?faces-redirect=true";
+	}
+
+	// Helpers
+	private void resetForm() {
 		selectedRequirementId = null;
 		selectedTestCaseDbIds.clear();
 		selectedTester = null;
-
-		return "/views/testmanager/dashboard.xhtml?faces-redirect=true";
 	}
 
 	private String generateNextTestRunIdFromDb() {
@@ -110,12 +119,12 @@ public class TestManagerController implements Serializable {
 		return String.format("TR-%03d", next);
 	}
 
-	// Dashboard: zeigt Testläufe (Container)
+	// Dashboard: TestRuns
 	public List<TestRun> getTestRuns() {
 		return testRunService.findAll();
 	}
 
-	// Getter/Setter
+	// Getter / Setter
 	public String getSelectedRequirementId() {
 		return selectedRequirementId;
 	}
@@ -141,6 +150,6 @@ public class TestManagerController implements Serializable {
 	}
 
 	public List<String> getTesters() {
-		return testers;
+		return TESTERS;
 	}
 }

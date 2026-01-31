@@ -14,25 +14,23 @@
 
 <h1>Testmanager Dashboard</h1>
 
-<p:dataTable value="#{testManagerController.testRuns}" var="tr"
+<p:dataTable value="#{testManagerController.testRuns}"
+             var="tr"
+             style="width:95%;"
              emptyMessage="Keine Testläufe vorhanden">
 
-    <p:column headerText="TR-ID">
-        #{tr.id}
+    <p:column headerText="TR-ID" style="width:10rem;">
+        <h:outputText value="#{tr.id}" />
     </p:column>
 
-    <p:column headerText="Tester">
-        #{tr.testerName}
+    <p:column headerText="Tester" style="width:10rem;">
+        <h:outputText value="#{tr.testerName}" />
     </p:column>
 
-    <p:column headerText="Anzahl Testfälle">
-        #{tr.items.size()}
-    </p:column>
-
-    <p:column headerText="TestCase-IDs">
+    <p:column headerText="Testfälle">
         <ui:repeat value="#{tr.items}" var="it" varStatus="st">
-            #{it.testCase.id} – #{it.testCase.title}
-            #{st.last ? '' : ', '}<br/>
+            <h:outputText value="#{it.testCase.id} – #{it.testCase.title}" />
+			<br />
         </ui:repeat>
     </p:column>
 
@@ -41,7 +39,6 @@
 <br/>
 
 <h:form>
-    <!-- Navigation: outcome statt action -->
     <p:button value="Neuen Testlauf anlegen"
               outcome="/views/testmanager/createTestRun.xhtml"
               styleClass="ui-button-primary" />
@@ -50,7 +47,7 @@
               outcome="/index.xhtml"
               icon="pi pi-home"
               styleClass="ui-button-primary"
-              style="margin-left: 0.3rem;" />
+              style="margin-left:0.3rem;" />
 </h:form>
 
 </h:body>

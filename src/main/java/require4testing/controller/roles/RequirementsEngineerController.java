@@ -20,30 +20,33 @@ public class RequirementsEngineerController implements Serializable {
 
 	private Requirement newRequirement = new Requirement();
 
-	// --- CREATE ---
+	// CREATE
 	public String saveRequirement() {
-
-		// ID generieren (DB-unabhängig)
 		String generatedId = requirementService.generateNextRequirementId();
 		newRequirement.setId(generatedId);
 
 		requirementService.save(newRequirement);
 
-		newRequirement = new Requirement();
+		resetForm();
 
 		return "/views/requirements/dashboard.xhtml?faces-redirect=true";
 	}
 
-	// --- READ ---
-	public Requirement findRequirement(String id) {
-		return requirementService.findByBusinessId(id);
-	}
-
+	// READ
 	public List<Requirement> getRequirements() {
 		return requirementService.findAll();
 	}
 
-	// --- Getter / Setter ---
+	public Requirement findRequirement(String id) {
+		return requirementService.findByBusinessId(id);
+	}
+
+	// Helpers
+	private void resetForm() {
+		newRequirement = new Requirement();
+	}
+
+	// Getter / Setter
 	public Requirement getNewRequirement() {
 		return newRequirement;
 	}

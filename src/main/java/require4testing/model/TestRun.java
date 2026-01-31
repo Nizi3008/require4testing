@@ -19,29 +19,21 @@ public class TestRun implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	// Technischer Primärschlüssel
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long dbId;
 
-	// Fachliche ID (z. B. TR-001)
 	@Column(nullable = false, unique = true)
-	private String id;
+	private String id; // TR-001
 
-	// Zugeordneter Tester
 	@Column(nullable = false)
 	private String testerName;
 
-	// Ein Testlauf besteht aus mehreren TestRunItems
 	@OneToMany(mappedBy = "testRun", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<TestRunItem> items = new ArrayList<>();
 
 	public TestRun() {
 	}
-
-	// ======================
-	// Getter / Setter
-	// ======================
 
 	public Long getDbId() {
 		return dbId;
@@ -68,24 +60,20 @@ public class TestRun implements Serializable {
 	}
 
 	public void setItems(List<TestRunItem> items) {
-		this.items = items;
+		this.items = (items != null) ? items : new ArrayList<>();
 	}
 
-	// ======================
-	// Komfortmethoden
-	// ======================
-
 	public void addItem(TestRunItem item) {
-		if (item != null) {
-			items.add(item);
-			item.setTestRun(this);
-		}
+		if (item == null)
+			return;
+		items.add(item);
+		item.setTestRun(this);
 	}
 
 	public void removeItem(TestRunItem item) {
-		if (item != null) {
-			items.remove(item);
-			item.setTestRun(null);
-		}
+		if (item == null)
+			return;
+		items.remove(item);
+		item.setTestRun(null);
 	}
 }

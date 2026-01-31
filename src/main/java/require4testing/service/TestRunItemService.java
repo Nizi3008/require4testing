@@ -17,6 +17,7 @@ public class TestRunItemService {
 		return EMF.createEntityManager();
 	}
 
+	// CREATE
 	public void save(TestRunItem item) {
 		EntityManager em = em();
 		try {
@@ -28,6 +29,7 @@ public class TestRunItemService {
 		}
 	}
 
+	// UPDATE
 	public void update(TestRunItem item) {
 		EntityManager em = em();
 		try {
@@ -39,9 +41,27 @@ public class TestRunItemService {
 		}
 	}
 
+	public void updateResult(Long itemDbId, String result) {
+		if (itemDbId == null || result == null || result.isBlank()) {
+			return;
+		}
+
+		EntityManager em = em();
+		try {
+			em.getTransaction().begin();
+			em.createQuery("UPDATE TestRunItem it SET it.testResult = :res WHERE it.dbId = :id")
+					.setParameter("res", result).setParameter("id", itemDbId).executeUpdate();
+			em.getTransaction().commit();
+		} finally {
+			em.close();
+		}
+	}
+
+	// READ
 	public TestRunItem findByDbId(Long dbId) {
-		if (dbId == null)
+		if (dbId == null) {
 			return null;
+		}
 
 		EntityManager em = em();
 		try {
@@ -61,12 +81,10 @@ public class TestRunItemService {
 		}
 	}
 
-	/**
-	 * Liefert alle TestRunItems für einen Tester. Join über it.testRun.testerName.
-	 */
 	public List<TestRunItem> findByTesterName(String testerName) {
-		if (testerName == null || testerName.isBlank())
+		if (testerName == null || testerName.isBlank()) {
 			return List.of();
+		}
 
 		EntityManager em = em();
 		try {
@@ -74,25 +92,6 @@ public class TestRunItemService {
 					.createQuery("SELECT it " + "FROM TestRunItem it " + "JOIN it.testRun tr "
 							+ "WHERE tr.testerName = :name " + "ORDER BY it.dbId DESC", TestRunItem.class)
 					.setParameter("name", testerName).getResultList();
-		} finally {
-			em.close();
-		}
-	}
-
-	/**
-	 * Ergebnis pro Item setzen (z.B. OFFEN / PASSED / FAILED)
-	 */
-	public void updateResult(Long itemDbId, String result) {
-		if (itemDbId == null || result == null || result.isBlank())
-			return;
-
-		EntityManager em = em();
-		try {
-			em.getTransaction().begin();
-			em.createQuery("UPDATE TestRunItem it SET it.testResult = :res WHERE it.dbId = :id")
-					.setParameter("res", result).setParameter("id", itemDbId).executeUpdate();
-
-			em.getTransaction().commit();
 		} finally {
 			em.close();
 		}

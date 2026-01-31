@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
 <h:head>
     <title>Testlauf erstellen</title>
@@ -11,71 +12,70 @@
 
 <h:body>
 
-<h1>Neuen Testlauf erstellen</h1>
+    <h1>Neuen Testlauf erstellen</h1>
 
-<h:form id="form">
-    <p:panel header="Testlauf" style="width: 40em;">
+    <h:form id="form">
+        <p:panel header="Testlauf" style="width: 40em;">
 
-        <!-- REQUIREMENT AUSWÄHLEN (Filter) -->
-        <p:outputLabel for="req" value="Requirement:" />
-        <p:selectOneMenu id="req"
-                         value="#{testManagerController.selectedRequirementId}"
-                         style="width: 95%;">
-            <f:selectItem itemLabel="Bitte wählen..." itemValue="#{null}" noSelectionOption="true" />
-            <f:selectItems value="#{requirementsEngineerController.requirements}"
-                           var="r"
-                           itemLabel="#{r.id} - #{r.title}"
-                           itemValue="#{r.id}" />
+            <!-- Requirement auswählen (Filter) -->
+            <p:outputLabel for="req" value="Requirement:" />
+            <p:selectOneMenu id="req"
+                             value="#{testManagerController.selectedRequirementId}"
+                             style="width: 95%;">
+                <f:selectItem itemLabel="Bitte wählen..." itemValue="#{null}" noSelectionOption="true" />
+                <f:selectItems value="#{requirementsEngineerController.requirements}"
+                               var="r"
+                               itemLabel="#{r.id} - #{r.title}"
+                               itemValue="#{r.id}" />
 
-            <!-- Requirement-Wechsel -> Testfälle neu laden -->
-            <p:ajax listener="#{testManagerController.onRequirementChange}"
-                    update="tcBox msg" />
-        </p:selectOneMenu>
+                <p:ajax listener="#{testManagerController.onRequirementChange}"
+                        update="tcBox msg" />
+            </p:selectOneMenu>
 
-        <br/><br/>
+            <br/><br/>
 
-        <!-- TESTFÄLLE (Mehrfachauswahl als Checkboxen) -->
-        <p:outputLabel for="tcBox" value="Testfälle:" />
-        <p:selectManyCheckbox id="tcBox"
-                              value="#{testManagerController.selectedTestCaseDbIds}"
-                              layout="pageDirection"
-                              style="width: 95%;">
-            <f:selectItems value="#{testManagerController.testCasesForSelectedRequirement}"
-                           var="tc"
-                           itemLabel="#{tc.id} – #{tc.title}"
-                           itemValue="#{tc.dbId}" />
-        </p:selectManyCheckbox>
+            <!-- Testfälle (Mehrfachauswahl als Checkboxen) -->
+            <p:outputLabel for="tcBox" value="Testfälle:" />
+            <p:selectManyCheckbox id="tcBox"
+                                  value="#{testManagerController.selectedTestCaseDbIds}"
+                                  layout="pageDirection"
+                                  style="width: 95%;">
+                <f:selectItems value="#{testManagerController.testCasesForSelectedRequirement}"
+                               var="tc"
+                               itemLabel="#{tc.id} – #{tc.title}"
+                               itemValue="#{tc.dbId}" />
+            </p:selectManyCheckbox>
 
-        <br/><br/>
+            <br/><br/>
 
-        <!-- TESTER AUSWÄHLEN -->
-        <p:outputLabel for="tester" value="Tester:" />
-        <p:selectOneMenu id="tester"
-                         value="#{testManagerController.selectedTester}"
-                         style="width: 95%;">
-            <f:selectItem itemLabel="Bitte wählen..." itemValue="#{null}" noSelectionOption="true" />
-            <f:selectItems value="#{testManagerController.testers}"
-                           var="t"
-                           itemLabel="#{t}"
-                           itemValue="#{t}" />
-        </p:selectOneMenu>
+            <!-- Tester auswählen -->
+            <p:outputLabel for="tester" value="Tester:" />
+            <p:selectOneMenu id="tester"
+                             value="#{testManagerController.selectedTester}"
+                             style="width: 95%;">
+                <f:selectItem itemLabel="Bitte wählen..." itemValue="#{null}" noSelectionOption="true" />
+                <f:selectItems value="#{testManagerController.testers}"
+                               var="t"
+                               itemLabel="#{t}"
+                               itemValue="#{t}" />
+            </p:selectOneMenu>
 
-        <br/><br/>
+            <br/><br/>
 
-        <!-- BUTTONS -->
-        <p:commandButton value="Speichern"
-                         action="#{testManagerController.saveTestRun}"
-                         ajax="false"
-                         styleClass="ui-button-primary" />
+            <!-- Buttons -->
+            <p:commandButton value="Speichern"
+                             action="#{testManagerController.saveTestRun}"
+                             ajax="false"
+                             styleClass="ui-button-primary" />
 
-        <p:button value="Abbrechen"
-                  outcome="/views/testmanager/dashboard.xhtml?faces-redirect=true"
-                  style="margin-left: 1em;" />
+            <p:button value="Abbrechen"
+                      outcome="/views/testmanager/dashboard.xhtml"
+                      style="margin-left: 1em;" />
 
-        <p:messages id="msg" autoUpdate="true" />
+            <p:messages id="msg" autoUpdate="true" />
 
-    </p:panel>
-</h:form>
+        </p:panel>
+    </h:form>
 
 </h:body>
 </html>
