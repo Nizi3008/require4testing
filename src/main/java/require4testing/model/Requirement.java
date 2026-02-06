@@ -17,7 +17,7 @@ public class Requirement implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long dbId; // technischer PK
+	private Long dbId; // technische DB-ID
 
 	@Column(name = "requirement_id", nullable = false, unique = true)
 	private String id; // fachliche ID: REQ-001

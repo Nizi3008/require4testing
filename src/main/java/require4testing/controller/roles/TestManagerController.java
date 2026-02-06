@@ -29,10 +29,10 @@ public class TestManagerController implements Serializable {
 	@Inject
 	private TestRunItemService testRunItemService;
 
-	// Prototyp: feste Tester-Namen
+	// Tester Namen
 	private static final List<String> TESTERS = List.of("Tester1", "Tester2", "Tester3");
 
-	// Auswahlfelder (JSF)
+	// Auswahlfelder
 	private String selectedRequirementId;
 	private List<Long> selectedTestCaseDbIds = new ArrayList<>();
 	private String selectedTester;

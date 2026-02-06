@@ -35,12 +35,23 @@ public class TesterController implements Serializable {
 		return assignedItems;
 	}
 
-	// UPDATE
-	public void saveResult(Long itemDbId, String result) {
-		if (itemDbId == null || result == null || result.isBlank()) {
+	// SAVE
+	public void saveAllResults() {
+		if (assignedItems == null || assignedItems.isEmpty()) {
 			return;
 		}
-		testRunItemService.updateResult(itemDbId, result);
+
+		for (TestRunItem it : assignedItems) {
+			if (it == null || it.getDbId() == null) {
+				continue;
+			}
+			String res = it.getTestResult();
+			if (res == null || res.isBlank()) {
+				continue;
+			}
+			testRunItemService.updateResult(it.getDbId(), res);
+		}
+
 		reload();
 	}
 

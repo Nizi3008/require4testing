@@ -36,6 +36,8 @@
             <p:outputLabel for="title" value="Titel:" />
             <p:inputText id="title"
                          value="#{testCaseAuthorController.newTestCase.title}"
+                         required="true"
+                         requiredMessage="Titel darf nicht leer sein."
                          style="width: 95%;" />
             <br/><br/>
 
